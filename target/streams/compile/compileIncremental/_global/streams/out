@@ -1,0 +1,6 @@
+[debug] [zinc] IncrementalCompile -----------
+[debug] IncrementalCompile.incrementalCompile
+[debug] previous = Stamps for: 17 products, 8 sources, 5 libraries
+[debug] current source = Set(${BASE}/target/scala-2.12/twirl/main/views/html/main.template.scala, ${BASE}/target/scala-2.12/routes/main/router/RoutesPrefix.scala, ${BASE}/target/scala-2.12/routes/main/controllers/ReverseRoutes.scala, ${BASE}/target/scala-2.12/twirl/main/views/html/prova.template.scala, ${BASE}/target/scala-2.12/routes/main/controllers/routes.java, ${BASE}/target/scala-2.12/routes/main/controllers/javascript/JavaScriptReverseRoutes.scala, ${BASE}/app/controllers/Prova.scala, ${BASE}/target/scala-2.12/routes/main/router/Routes.scala)
+[debug] > initialChanges = InitialChanges(Changes(added = Set(), removed = Set(), changed = Set(), unmodified = ...),Set(),Set(),API Changes: Set())
+[debug] No changes

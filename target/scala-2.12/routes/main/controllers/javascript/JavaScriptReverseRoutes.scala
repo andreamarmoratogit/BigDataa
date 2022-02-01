@@ -32,14 +32,28 @@ package controllers.javascript {
       "controllers.Prova.p2",
       """
         function() {
-          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "p2"})
+        
+          if (true) {
+            return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "p2"})
+          }
+        
+        }
+      """
+    )
+  
+    // @LINE:9
+    def p4: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.p4",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "p4"})
         }
       """
     )
   
   }
 
-  // @LINE:13
+  // @LINE:16
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -47,7 +61,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:13
+    // @LINE:16
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

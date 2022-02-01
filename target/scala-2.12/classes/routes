@@ -5,6 +5,9 @@
 # Home page
 GET     /                           controllers.Prova.p1()
 POST    /p2                         controllers.Prova.p2()
+GET     /p2                         controllers.Prova.p2()
+GET     /p4                         controllers.Prova.p4()
+
 # Widgets
 #GET     /widgets                    controllers.WidgetController.listWidgets
 #POST    /widgets                    controllers.WidgetController.createWidget

@@ -1,120 +1,63 @@
-@(query:Form[Query])(implicit messages: MessagesRequestHeader)
+@(content:Html)
 <!doctype html>
 
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>jQuery UI Autocomplete - Scrollable results</title>
+        <title>BigData Project</title>
         <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/jquery-ui.css")">
         <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/jquery-ui.theme.css")">
         <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/jquery-ui.structure.css")">
-        <style>
-                fieldset {
-                    border: 0;
-                }
-                label {
-                    display: block;
-                    margin: 30px 0 0 0;
-                }
-                .overflow {
-                    height: 200px;
-                }
-        </style>
-        <script>
-                $( function() {
-                    var availableTags = [
-                        "ActionScript","AppleScript","Asp",
-                        "BASIC",
-                        "C",
-                        "C++",
-                        "Clojure"];
-                    $( "#tags" ).autocomplete({
-                        source: availableTags
-                    });
-                } );
-        </script>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-                google.charts.load('current', {
-                    'packages':['geochart'],
-                });
-                google.charts.setOnLoadCallback(drawRegionsMap);
-
-                function drawRegionsMap() {
-                    var data = google.visualization.arrayToDataTable([
-                        ['Country', 'Popularity'],
-                        ['Germany', 200],
-                        ['United States', 300],
-                        ['Brazil', 400],
-                        ['Canada', 500],
-                        ['France', 600],
-                        ['RU', 700]
-                    ]);
-
-                    var options = {region:"021"};
-
-                    var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-
-                    chart.draw(data, options);
-                }
-        </script>
-    </head>
-    <body>
-        <select id="selectmenu">
-            <option>Slower</option>
-            <option>Slow</option>
-            <option selected="selected">Medium</option>
-            <option>Fast</option>
-            <option>Faster</option>
-        </select>
-        <select id="selectmenu2">
-            <option>Slower</option>
-            <option>Slow</option>
-            <option selected="selected">Medium</option>
-            <option>Fast</option>
-            <option>Faster</option>
-        </select>
-        <div id="regions_div" style="width: 900px; height: 500px;"></div>
-        <form method="post" action="@routes.Prova.p2()">
-            @helper.CSRF.formField
-            <div class="ui-widget">
-                <label for="nameState">nameState: </label>
-                <input name="nameState" id="nameState"> <!-- il tag name deve coincidere con la form -->
-            </div>
-            <br>
-            <div class="ui-widget">
-                <label for="column">column: </label>
-                <input name="column" id="column">
-            </div>
-            <br>
-            <div class="ui-widget">
-                <label for="tipo">tipo: </label>
-                <input name="tipo" id="tipo">
-            </div>
-            <input type="submit">
-        </form>
-        <div class="widget">
-            <h1>Widget Buttons</h1>
-            <button>A button element</button>
-
-            <input type="submit" value="A submit button">
-
-            <a href="#">An anchor</a>
-        </div>
-        <h1>CSS Buttons</h1>
-        <button class="ui-button ui-widget ui-corner-all">A button element</button>
-
-        <input class="ui-button ui-widget ui-corner-all" type="submit" value="A submit button">
-
-        <a class="ui-button ui-widget ui-corner-all" href="#">An anchor</a>
-
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery-ui.js")"></script>
-        <script>
-                $( "#selectmenu" ).selectmenu();
-                $( "#selectmenu2" ).selectmenu();
-        </script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+            <a class="navbar-brand" >Meteo Project</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="@routes.Prova.p1()">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Query
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="@routes.Prova.p2()">Min Attribute</a>
+                            <a class="dropdown-item" href="#">Max Attribute</a>
+                            <a class="dropdown-item" href="@routes.Prova.p4()">Meteo temporale</a>
+                            <a class="dropdown-item" href="#">Time Series</a>
+                            <a class="dropdown-item" href="#">Cartina colorata</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Machine Learning
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">?????</a>
+                            <a class="dropdown-item" href="#">?????</a>
+                            <a class="dropdown-item" href="#">?????</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <br>
+        @content
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
 </html>
 

@@ -19,17 +19,23 @@ class Prova @Inject()(cc:MessagesControllerComponents)  extends MessagesAbstract
 
 
   def p1(): Action[AnyContent] = Action { implicit Request =>
-    Ok(views.html.main(query))
+    Ok(views.html.home())
+  }
+  def p2(): Action[AnyContent] = Action { implicit Request =>
+    Ok(views.html.minAttribute(query))
+  }
+  def p4(): Action[AnyContent] = Action { implicit Request =>
+    Ok(views.html.prova())
   }
 
-  def p2(): Action[AnyContent] = Action{ implicit Request =>
+  /*def p3(): Action[AnyContent] = Action{ implicit Request =>
     query.bindFromRequest().fold(
       error => BadRequest(""),
       q => Ok(views.html.prova(q))
     )
 
 
-  }
+  }*/
 
 
 }

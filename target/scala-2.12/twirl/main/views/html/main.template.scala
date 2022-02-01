@@ -15,10 +15,10 @@ import play.api.templates.PlayMagic._
 import play.api.mvc._
 import play.api.data._
 
-object main extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template2[Form[Query],MessagesRequestHeader,play.twirl.api.HtmlFormat.Appendable] {
+object main extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[Html,play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply/*1.2*/(query:Form[Query])(implicit messages: MessagesRequestHeader):play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/(content:Html):play.twirl.api.HtmlFormat.Appendable = {
     _display_ {
       {
 
@@ -29,116 +29,60 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>jQuery UI Autocomplete - Scrollable results</title>
+        <title>BigData Project</title>
         <link rel="stylesheet" href=""""),_display_(/*9.39*/routes/*9.45*/.Assets.versioned("stylesheets/jquery-ui.css")),format.raw/*9.91*/("""">
         <link rel="stylesheet" href=""""),_display_(/*10.39*/routes/*10.45*/.Assets.versioned("stylesheets/jquery-ui.theme.css")),format.raw/*10.97*/("""">
         <link rel="stylesheet" href=""""),_display_(/*11.39*/routes/*11.45*/.Assets.versioned("stylesheets/jquery-ui.structure.css")),format.raw/*11.101*/("""">
-        <style>
-                fieldset """),format.raw/*13.26*/("""{"""),format.raw/*13.27*/("""
-                    """),format.raw/*14.21*/("""border: 0;
-                """),format.raw/*15.17*/("""}"""),format.raw/*15.18*/("""
-                """),format.raw/*16.17*/("""label """),format.raw/*16.23*/("""{"""),format.raw/*16.24*/("""
-                    """),format.raw/*17.21*/("""display: block;
-                    margin: 30px 0 0 0;
-                """),format.raw/*19.17*/("""}"""),format.raw/*19.18*/("""
-                """),format.raw/*20.17*/(""".overflow """),format.raw/*20.27*/("""{"""),format.raw/*20.28*/("""
-                    """),format.raw/*21.21*/("""height: 200px;
-                """),format.raw/*22.17*/("""}"""),format.raw/*22.18*/("""
-        """),format.raw/*23.9*/("""</style>
-        <script>
-                $( function() """),format.raw/*25.31*/("""{"""),format.raw/*25.32*/("""
-                    """),format.raw/*26.21*/("""var availableTags = [
-                        "ActionScript","AppleScript","Asp",
-                        "BASIC",
-                        "C",
-                        "C++",
-                        "Clojure"];
-                    $( "#tags" ).autocomplete("""),format.raw/*32.47*/("""{"""),format.raw/*32.48*/("""
-                        """),format.raw/*33.25*/("""source: availableTags
-                    """),format.raw/*34.21*/("""}"""),format.raw/*34.22*/(""");
-                """),format.raw/*35.17*/("""}"""),format.raw/*35.18*/(""" """),format.raw/*35.19*/(""");
-        </script>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-                google.charts.load('current', """),format.raw/*39.47*/("""{"""),format.raw/*39.48*/("""
-                    """),format.raw/*40.21*/("""'packages':['geochart'],
-                """),format.raw/*41.17*/("""}"""),format.raw/*41.18*/(""");
-                google.charts.setOnLoadCallback(drawRegionsMap);
+        <script type="text/javascript" src=""""),_display_(/*12.46*/routes/*12.52*/.Assets.versioned("javascripts/jquery.js")),format.raw/*12.94*/(""""></script>
+        <script type="text/javascript" src=""""),_display_(/*13.46*/routes/*13.52*/.Assets.versioned("javascripts/jquery-ui.js")),format.raw/*13.97*/(""""></script>
+        <script type='text/javascript' src=""""),_display_(/*14.46*/routes/*14.52*/.Assets.versioned("javascripts/googlechart.js")),format.raw/*14.99*/(""""></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-                function drawRegionsMap() """),format.raw/*44.43*/("""{"""),format.raw/*44.44*/("""
-                    """),format.raw/*45.21*/("""var data = google.visualization.arrayToDataTable([
-                        ['Country', 'Popularity'],
-                        ['Germany', 200],
-                        ['United States', 300],
-                        ['Brazil', 400],
-                        ['Canada', 500],
-                        ['France', 600],
-                        ['RU', 700]
-                    ]);
-
-                    var options = """),format.raw/*55.35*/("""{"""),format.raw/*55.36*/("""region:"021""""),format.raw/*55.48*/("""}"""),format.raw/*55.49*/(""";
-
-                    var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-
-                    chart.draw(data, options);
-                """),format.raw/*60.17*/("""}"""),format.raw/*60.18*/("""
-        """),format.raw/*61.9*/("""</script>
     </head>
     <body>
-        <select id="selectmenu">
-            <option>Slower</option>
-            <option>Slow</option>
-            <option selected="selected">Medium</option>
-            <option>Fast</option>
-            <option>Faster</option>
-        </select>
-        <select id="selectmenu2">
-            <option>Slower</option>
-            <option>Slow</option>
-            <option selected="selected">Medium</option>
-            <option>Fast</option>
-            <option>Faster</option>
-        </select>
-        <div id="regions_div" style="width: 900px; height: 500px;"></div>
-        <form method="post" action=""""),_display_(/*79.38*/routes/*79.44*/.Prova.p2()),format.raw/*79.55*/("""">
-            """),_display_(/*80.14*/helper/*80.20*/.CSRF.formField),format.raw/*80.35*/("""
-            """),format.raw/*81.13*/("""<div class="ui-widget">
-                <label for="nameState">nameState: </label>
-                <input name="nameState" id="nameState"> <!-- il tag name deve coincidere con la form -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+            <a class="navbar-brand" >Meteo Project</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href=""""),_display_(/*28.52*/routes/*28.58*/.Prova.p1()),format.raw/*28.69*/("""">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Query
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href=""""),_display_(/*35.61*/routes/*35.67*/.Prova.p2()),format.raw/*35.78*/("""">Min Attribute</a>
+                            <a class="dropdown-item" href="#">Max Attribute</a>
+                            <a class="dropdown-item" href=""""),_display_(/*37.61*/routes/*37.67*/.Prova.p4()),format.raw/*37.78*/("""">Meteo temporale</a>
+                            <a class="dropdown-item" href="#">Time Series</a>
+                            <a class="dropdown-item" href="#">Cartina colorata</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Machine Learning
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">?????</a>
+                            <a class="dropdown-item" href="#">?????</a>
+                            <a class="dropdown-item" href="#">?????</a>
+                        </div>
+                    </li>
+                </ul>
             </div>
-            <br>
-            <div class="ui-widget">
-                <label for="column">column: </label>
-                <input name="column" id="column">
-            </div>
-            <br>
-            <div class="ui-widget">
-                <label for="tipo">tipo: </label>
-                <input name="tipo" id="tipo">
-            </div>
-            <input type="submit">
-        </form>
-        <div class="widget">
-            <h1>Widget Buttons</h1>
-            <button>A button element</button>
+        </nav>
+        <br>
+        """),_display_(/*56.10*/content),format.raw/*56.17*/("""
 
-            <input type="submit" value="A submit button">
 
-            <a href="#">An anchor</a>
-        </div>
-        <h1>CSS Buttons</h1>
-        <button class="ui-button ui-widget ui-corner-all">A button element</button>
-
-        <input class="ui-button ui-widget ui-corner-all" type="submit" value="A submit button">
-
-        <a class="ui-button ui-widget ui-corner-all" href="#">An anchor</a>
-
-        <script type="text/javascript" src=""""),_display_(/*112.46*/routes/*112.52*/.Assets.versioned("javascripts/jquery.js")),format.raw/*112.94*/(""""></script>
-        <script type="text/javascript" src=""""),_display_(/*113.46*/routes/*113.52*/.Assets.versioned("javascripts/jquery-ui.js")),format.raw/*113.97*/(""""></script>
-        <script>
-                $( "#selectmenu" ).selectmenu();
-                $( "#selectmenu2" ).selectmenu();
-        </script>
+        """),format.raw/*59.9*/("""<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
 </html>
 
@@ -148,9 +92,9 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
     }
   }
 
-  def render(query:Form[Query],messages:MessagesRequestHeader): play.twirl.api.HtmlFormat.Appendable = apply(query)(messages)
+  def render(content:Html): play.twirl.api.HtmlFormat.Appendable = apply(content)
 
-  def f:((Form[Query]) => (MessagesRequestHeader) => play.twirl.api.HtmlFormat.Appendable) = (query) => (messages) => apply(query)(messages)
+  def f:((Html) => play.twirl.api.HtmlFormat.Appendable) = (content) => apply(content)
 
   def ref: this.type = this
 
@@ -160,9 +104,9 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
               /*
                   -- GENERATED --
                   SOURCE: app/views/main.scala.html
-                  HASH: ec77c684d23cf6d39729c043d76ca08784537fbb
-                  MATRIX: 755->1|910->63|1194->321|1208->327|1274->373|1342->414|1357->420|1430->472|1498->513|1513->519|1591->575|1663->619|1692->620|1741->641|1796->668|1825->669|1870->686|1904->692|1933->693|1982->714|2082->786|2111->787|2156->804|2194->814|2223->815|2272->836|2331->867|2360->868|2396->877|2480->933|2509->934|2558->955|2843->1212|2872->1213|2925->1238|2995->1280|3024->1281|3071->1300|3100->1301|3129->1302|3360->1505|3389->1506|3438->1527|3507->1568|3536->1569|3675->1680|3704->1681|3753->1702|4191->2112|4220->2113|4260->2125|4289->2126|4491->2300|4520->2301|4556->2310|5222->2949|5237->2955|5269->2966|5312->2982|5327->2988|5363->3003|5404->3016|6588->4172|6604->4178|6668->4220|6753->4277|6769->4283|6836->4328
-                  LINES: 21->1|26->2|33->9|33->9|33->9|34->10|34->10|34->10|35->11|35->11|35->11|37->13|37->13|38->14|39->15|39->15|40->16|40->16|40->16|41->17|43->19|43->19|44->20|44->20|44->20|45->21|46->22|46->22|47->23|49->25|49->25|50->26|56->32|56->32|57->33|58->34|58->34|59->35|59->35|59->35|63->39|63->39|64->40|65->41|65->41|68->44|68->44|69->45|79->55|79->55|79->55|79->55|84->60|84->60|85->61|103->79|103->79|103->79|104->80|104->80|104->80|105->81|136->112|136->112|136->112|137->113|137->113|137->113
+                  HASH: 3681a79eac91b8189ebb31131b3cbdd79cbad166
+                  MATRIX: 726->1|834->16|1090->246|1104->252|1170->298|1238->339|1253->345|1326->397|1394->438|1409->444|1487->500|1562->548|1577->554|1640->596|1724->653|1739->659|1805->704|1889->761|1904->767|1972->814|2898->1713|2913->1719|2945->1730|3468->2226|3483->2232|3515->2243|3702->2403|3717->2409|3749->2420|4738->3382|4766->3389|4804->3400
+                  LINES: 21->1|26->2|33->9|33->9|33->9|34->10|34->10|34->10|35->11|35->11|35->11|36->12|36->12|36->12|37->13|37->13|37->13|38->14|38->14|38->14|52->28|52->28|52->28|59->35|59->35|59->35|61->37|61->37|61->37|80->56|80->56|83->59
                   -- GENERATED --
               */
           

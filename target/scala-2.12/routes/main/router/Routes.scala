@@ -14,7 +14,7 @@ class Routes(
   override val errorHandler: play.api.http.HttpErrorHandler, 
   // @LINE:6
   Prova_0: controllers.Prova,
-  // @LINE:13
+  // @LINE:16
   Assets_1: controllers.Assets,
   val prefix: String
 ) extends GeneratedRouter {
@@ -23,7 +23,7 @@ class Routes(
    def this(errorHandler: play.api.http.HttpErrorHandler,
     // @LINE:6
     Prova_0: controllers.Prova,
-    // @LINE:13
+    // @LINE:16
     Assets_1: controllers.Assets
   ) = this(errorHandler, Prova_0, Assets_1, "/")
 
@@ -40,6 +40,8 @@ class Routes(
   def documentation = List(
     ("""GET""", this.prefix, """controllers.Prova.p1()"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """p2""", """controllers.Prova.p2()"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """p2""", """controllers.Prova.p2()"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """p4""", """controllers.Prova.p4()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
@@ -84,11 +86,47 @@ class Routes(
     )
   )
 
-  // @LINE:13
-  private[this] lazy val controllers_Assets_versioned2_route = Route("GET",
+  // @LINE:8
+  private[this] lazy val controllers_Prova_p22_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("p2")))
+  )
+  private[this] lazy val controllers_Prova_p22_invoker = createInvoker(
+    Prova_0.p2(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "p2",
+      Nil,
+      "GET",
+      this.prefix + """p2""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:9
+  private[this] lazy val controllers_Prova_p43_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("p4")))
+  )
+  private[this] lazy val controllers_Prova_p43_invoker = createInvoker(
+    Prova_0.p4(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "p4",
+      Nil,
+      "GET",
+      this.prefix + """p4""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:16
+  private[this] lazy val controllers_Assets_versioned4_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("assets/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_versioned2_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_versioned4_invoker = createInvoker(
     Assets_1.versioned(fakeValue[String], fakeValue[Asset]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -117,10 +155,22 @@ class Routes(
         controllers_Prova_p21_invoker.call(Prova_0.p2())
       }
   
-    // @LINE:13
-    case controllers_Assets_versioned2_route(params@_) =>
+    // @LINE:8
+    case controllers_Prova_p22_route(params@_) =>
+      call { 
+        controllers_Prova_p22_invoker.call(Prova_0.p2())
+      }
+  
+    // @LINE:9
+    case controllers_Prova_p43_route(params@_) =>
+      call { 
+        controllers_Prova_p43_invoker.call(Prova_0.p4())
+      }
+  
+    // @LINE:16
+    case controllers_Assets_versioned4_route(params@_) =>
       call(Param[String]("path", Right("/public")), params.fromPath[Asset]("file", None)) { (path, file) =>
-        controllers_Assets_versioned2_invoker.call(Assets_1.versioned(path, file))
+        controllers_Assets_versioned4_invoker.call(Assets_1.versioned(path, file))
       }
   }
 }

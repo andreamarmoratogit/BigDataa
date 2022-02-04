@@ -25,48 +25,37 @@ object prova extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.Html
 
 Seq[Any](format.raw/*1.4*/("""
 """),format.raw/*2.1*/("""<!doctype html>
-<html>
-    <head>
-        <script type='text/javascript' src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type='text/javascript'>
-                google.charts.load('current', """),format.raw/*7.47*/("""{"""),format.raw/*7.48*/("""
-                    """),format.raw/*8.21*/("""'packages': ['geochart'],
-                    // Note: Because markers require geocoding, you'll need a mapsApiKey.
-                    // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
-                    'mapsApiKey': 'AIzaSyDCbtHkiH8ftf1b4_eCxqCZcsr7Nwe2lcw'
-                """),format.raw/*12.17*/("""}"""),format.raw/*12.18*/(""");
-                google.charts.setOnLoadCallback(drawMarkersMap);
-
-                function drawMarkersMap() """),format.raw/*15.43*/("""{"""),format.raw/*15.44*/("""
-                    """),format.raw/*16.21*/("""var data = google.visualization.arrayToDataTable([
-                        ['City',   'Population', 'Area'],
-                        ['Rome',      2761477,    1285.31],
-                        ['Milan',     1324110,    181.76],
-                        ['Naples',    959574,     117.27],
-                        ['Turin',     907563,     130.17],
-                        ['Palermo',   655875,     158.9],
-                        ['Genoa',     607906,     243.60],
-                        ['Bologna',   380181,     140.7],
-                        ['Florence',  371282,     102.41],
-                        ['Fiumicino', 67370,      213.44],
-                        ['Anzio',     52192,      43.43],
-                        ['Ciampino',  38262,      11]
-                    ]);
-
-                    var options = """),format.raw/*31.35*/("""{"""),format.raw/*31.36*/("""
-                        """),format.raw/*32.25*/("""region: 'IT',
-                        displayMode: 'markers',
-                        colorAxis: """),format.raw/*34.36*/("""{"""),format.raw/*34.37*/("""colors: ['green', 'blue']"""),format.raw/*34.62*/("""}"""),format.raw/*34.63*/("""
-                    """),format.raw/*35.21*/("""}"""),format.raw/*35.22*/(""";
-
-                    var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
-                    chart.draw(data, options);
-                """),format.raw/*39.17*/("""}"""),format.raw/*39.18*/(""";
-        </script>
-    </head>
-    <body>
-        <div id="chart_div" style="width: 900px; height: 500px;"></div>
-    </body>
+<html lang="en">
+        <head>
+                <meta charset="utf-8">
+                <link rel="stylesheet" href=""""),_display_(/*6.47*/routes/*6.53*/.Assets.versioned("stylesheets/openlayers.css")),format.raw/*6.100*/("""">
+                <style>
+      .map """),format.raw/*8.12*/("""{"""),format.raw/*8.13*/("""
+              """),format.raw/*9.15*/("""height: 400px;
+              width: 100%;
+      """),format.raw/*11.7*/("""}"""),format.raw/*11.8*/("""
+    """),format.raw/*12.5*/("""</style>
+            <script type="text/javascript" src=""""),_display_(/*13.50*/routes/*13.56*/.Assets.versioned("javascripts/openlayers.js")),format.raw/*13.102*/(""""></script>
+                <title>OpenLayers example</title>
+        </head>
+        <body>
+                <h2>My Map</h2>
+                <div id="map" class="map"></div>
+                <script type="text/javascript">
+      var map = new ol.Map("""),format.raw/*20.28*/("""{"""),format.raw/*20.29*/("""
+              """),format.raw/*21.15*/("""target: 'map',
+              layers: [
+                      new ol.layer.Tile("""),format.raw/*23.41*/("""{"""),format.raw/*23.42*/("""
+                              """),format.raw/*24.31*/("""source: new ol.source.OSM()
+                      """),format.raw/*25.23*/("""}"""),format.raw/*25.24*/(""")
+              ],
+              view: new ol.View("""),format.raw/*27.33*/("""{"""),format.raw/*27.34*/("""
+                      """),format.raw/*28.23*/("""center: ol.proj.fromLonLat([37.41, 8.82]),
+                      zoom: 4
+              """),format.raw/*30.15*/("""}"""),format.raw/*30.16*/(""")
+      """),format.raw/*31.7*/("""}"""),format.raw/*31.8*/(""");
+    </script>
+        </body>
 </html>
 """))
       }
@@ -85,9 +74,9 @@ Seq[Any](format.raw/*1.4*/("""
               /*
                   -- GENERATED --
                   SOURCE: app/views/prova.scala.html
-                  HASH: 1cf021afc31477b80ab023ba013cae6a41c2ca74
-                  MATRIX: 722->1|818->3|846->5|1094->226|1122->227|1171->249|1522->572|1551->573|1693->687|1722->688|1772->710|2625->1535|2654->1536|2708->1562|2835->1661|2864->1662|2917->1687|2946->1688|2996->1710|3025->1711|3228->1886|3257->1887
-                  LINES: 21->1|26->1|27->2|32->7|32->7|33->8|37->12|37->12|40->15|40->15|41->16|56->31|56->31|57->32|59->34|59->34|59->34|59->34|60->35|60->35|64->39|64->39
+                  HASH: f57ca00b3a02f2391616b393b265cccc18f23f08
+                  MATRIX: 722->1|818->3|846->5|1009->142|1023->148|1091->195|1158->235|1186->236|1229->252|1306->302|1334->303|1367->309|1453->368|1468->374|1536->420|1820->676|1849->677|1893->693|2002->774|2031->775|2091->807|2170->858|2199->859|2280->912|2309->913|2361->937|2478->1026|2507->1027|2543->1036|2571->1037
+                  LINES: 21->1|26->1|27->2|31->6|31->6|31->6|33->8|33->8|34->9|36->11|36->11|37->12|38->13|38->13|38->13|45->20|45->20|46->21|48->23|48->23|49->24|50->25|50->25|52->27|52->27|53->28|55->30|55->30|56->31|56->31
                   -- GENERATED --
               */
           

@@ -25,7 +25,7 @@ class Prova @Inject()(cc:MessagesControllerComponents)  extends MessagesAbstract
     Ok(views.html.minAttribute(query))
   }
   def p4(): Action[AnyContent] = Action { implicit Request =>
-    Ok(views.html.prova())
+    Ok(views.html.meteo_tempo(query))
   }
 
   /*def p3(): Action[AnyContent] = Action{ implicit Request =>

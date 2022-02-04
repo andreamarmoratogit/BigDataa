@@ -1,3 +1,3 @@
-[error] [Error] C:\Users\marmo\BigDataa\app\views\minAttribute.scala.html:77
-[error] }: Expected '"' but found 'EOF'
+[error] [Error] C:\Users\marmo\BigDataa\app\views\prova.scala.html:4
+[error]         var ZoomChartsLicense = "ZCS-5uvo8rdu1: ZoomCharts SDK 30 day Free Trial License for mar..@..l.com (valid for testing only); upgrades until: 2022-03-03";: Invalid '@' symbol
 [error] (Compile / twirlCompileTemplates) Twirl compilation failed

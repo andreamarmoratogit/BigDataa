@@ -32,37 +32,40 @@
                 var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
                 chart.draw(data, options);
             }
-
-
-
-            google.charts.load('current', {
-                'packages': ['geochart'],
-                'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
-            });
-            google.charts.setOnLoadCallback(drawMarkersMap);
-
-            function drawMarkersMap() {
-                var data = google.visualization.arrayToDataTable([
-                    ['City',   'Population', 'Area'],
-                    ['Rome',      2761477,    1285.31],
-                    ['Milan',     1324110,    181.76],
-                    ['Naples',    959574,     117.27],
-
-                ]);
-
-                var options = {
-                    region: 'IT',
-                    displayMode: 'markers',
-                    colorAxis: {colors: ['green', 'blue']}
-                };
-
-                var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
-                chart.draw(data, options);
-            };
     </script>
-    <div class="container ">
-        <div id="chart_div" style="width: 900px; height: 500px;"></div>
-    </div>
+
+    <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/openlayers.css")">
+            <style>
+                    .map {
+                        height: 400px;
+                        width: 100%;
+                    }
+            </style>
+            <script type="text/javascript" src="@routes.Assets.versioned("javascripts/openlayers.js")"></script>
+            <title>OpenLayers example</title>
+        </head>
+        <body>
+            <h2>My Map</h2>
+            <div id="map" class="map"></div>
+            <script type="text/javascript">
+                    var map = new ol.Map({
+                        target: 'map',
+                        layers: [
+                            new ol.layer.Tile({
+                                source: new ol.source.OSM()
+                            })
+                        ],
+                        view: new ol.View({
+                            center: ol.proj.fromLonLat([37.41, 8.82]),
+                            zoom: 4
+                        })
+                    });
+            </script>
+        </body>
+    </html>
     <div class="container">
         <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
     </div>

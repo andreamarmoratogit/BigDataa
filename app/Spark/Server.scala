@@ -10,5 +10,4 @@ object Server extends App {
   val ss=SparkSession.builder().getOrCreate()
   val g=new Gestore(sc,ss,conf)
   g.predictor2("Tmax")
-  //g.start
 }

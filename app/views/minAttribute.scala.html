@@ -1,6 +1,11 @@
-@(query:Form[Query])(implicit messages: MessagesRequestHeader)
+
+@import org.apache.spark.sql.Row
+@(query:Form[Query])(ret:Array[Row])(implicit messages: MessagesRequestHeader)
 <!doctype html>
 @main{
+    <script type="text/javascript">
+        console.log(@ret.head.get(0))
+    </script>
     <script type="text/javascript">
             google.charts.load('current', {
                 'packages':['geochart'],
@@ -26,10 +31,11 @@
             }
     </script>
     <div class="position-absolute top-0 start-1">
-        <form>
+        <form method="post" action="@routes.Prova.postMinAttribute()">
+            @helper.CSRF.formField
             <div class="form-select">
                 <label for="exampleFormControlSelect1">Mese</label>
-                <select class="form-control" id="exampleFormControlSelect1" >
+                <select class="form-control" id="exampleFormControlSelect1" name="mese" >
                     <option>Gennaio</option>
                     <option>Febbraio</option>
                     <option>Marzo</option>
@@ -40,7 +46,7 @@
             <br>
             <div class="form-group">
                 <label for="exampleFormControlSelect2">Attributo</label>
-                <select class="form-control" id="exampleFormControlSelect2">
+                <select class="form-control" id="exampleFormControlSelect2" name="misura">
                     <option>Temperatura Max</option>
                     <option>Temperatura Min</option>
                     <option>Temperatura Media</option>
@@ -49,6 +55,7 @@
                     <option>Velocita media del vento</option>
                 </select>
             </div>
+            <input type="submit">
         </form>
     </div>
     <div class="container ">

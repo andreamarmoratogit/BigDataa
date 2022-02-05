@@ -49,16 +49,16 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href=""""),_display_(/*28.52*/routes/*28.58*/.Prova.p1()),format.raw/*28.69*/("""">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href=""""),_display_(/*28.52*/routes/*28.58*/.Prova.home()),format.raw/*28.71*/("""">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Query
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href=""""),_display_(/*35.61*/routes/*35.67*/.Prova.p2()),format.raw/*35.78*/("""">Min Attribute</a>
+                            <a class="dropdown-item" href=""""),_display_(/*35.61*/routes/*35.67*/.Prova.getMinAttribute()),format.raw/*35.91*/("""">Min Attribute</a>
                             <a class="dropdown-item" href="#">Max Attribute</a>
-                            <a class="dropdown-item" href=""""),_display_(/*37.61*/routes/*37.67*/.Prova.p4()),format.raw/*37.78*/("""">Meteo temporale</a>
+                            <a class="dropdown-item" href="">Meteo temporale</a>
                             <a class="dropdown-item" href="#">Time Series</a>
                             <a class="dropdown-item" href="#">Cartina colorata</a>
                         </div>
@@ -104,9 +104,9 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
               /*
                   -- GENERATED --
                   SOURCE: app/views/main.scala.html
-                  HASH: 3681a79eac91b8189ebb31131b3cbdd79cbad166
-                  MATRIX: 726->1|834->16|1090->246|1104->252|1170->298|1238->339|1253->345|1326->397|1394->438|1409->444|1487->500|1562->548|1577->554|1640->596|1724->653|1739->659|1805->704|1889->761|1904->767|1972->814|2898->1713|2913->1719|2945->1730|3468->2226|3483->2232|3515->2243|3702->2403|3717->2409|3749->2420|4738->3382|4766->3389|4804->3400
-                  LINES: 21->1|26->2|33->9|33->9|33->9|34->10|34->10|34->10|35->11|35->11|35->11|36->12|36->12|36->12|37->13|37->13|37->13|38->14|38->14|38->14|52->28|52->28|52->28|59->35|59->35|59->35|61->37|61->37|61->37|80->56|80->56|83->59
+                  HASH: 30d9597398ac143b655609fbf31e663deeabac1c
+                  MATRIX: 726->1|834->16|1090->246|1104->252|1170->298|1238->339|1253->345|1326->397|1394->438|1409->444|1487->500|1562->548|1577->554|1640->596|1724->653|1739->659|1805->704|1889->761|1904->767|1972->814|2898->1713|2913->1719|2947->1732|3470->2228|3485->2234|3530->2258|4678->3379|4706->3386|4744->3397
+                  LINES: 21->1|26->2|33->9|33->9|33->9|34->10|34->10|34->10|35->11|35->11|35->11|36->12|36->12|36->12|37->13|37->13|37->13|38->14|38->14|38->14|52->28|52->28|52->28|59->35|59->35|59->35|80->56|80->56|83->59
                   -- GENERATED --
               */
           

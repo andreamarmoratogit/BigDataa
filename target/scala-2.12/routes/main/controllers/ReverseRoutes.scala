@@ -17,41 +17,33 @@ package controllers {
 
   
     // @LINE:6
-    def p1(): Call = {
+    def home(): Call = {
       
       Call("GET", _prefix)
     }
   
     // @LINE:7
-    def p2(): Call = {
-    
-      () match {
+    def postMinAttribute(): Call = {
       
-        // @LINE:7
-        case ()  =>
-          
-          Call("POST", _prefix + { _defaultPrefix } + "p2")
-      
-      }
-    
+      Call("POST", _prefix + { _defaultPrefix } + "minAttribute")
     }
   
-    // @LINE:9
-    def p4(): Call = {
+    // @LINE:8
+    def getMinAttribute(): Call = {
       
-      Call("GET", _prefix + { _defaultPrefix } + "p4")
+      Call("GET", _prefix + { _defaultPrefix } + "minAttribute")
     }
   
   }
 
-  // @LINE:16
+  // @LINE:15
   class ReverseAssets(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:16
+    // @LINE:15
     def versioned(file:Asset): Call = {
       implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
       Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))

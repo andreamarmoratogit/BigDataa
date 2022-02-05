@@ -14,7 +14,7 @@ class Routes(
   override val errorHandler: play.api.http.HttpErrorHandler, 
   // @LINE:6
   Prova_0: controllers.Prova,
-  // @LINE:16
+  // @LINE:15
   Assets_1: controllers.Assets,
   val prefix: String
 ) extends GeneratedRouter {
@@ -23,7 +23,7 @@ class Routes(
    def this(errorHandler: play.api.http.HttpErrorHandler,
     // @LINE:6
     Prova_0: controllers.Prova,
-    // @LINE:16
+    // @LINE:15
     Assets_1: controllers.Assets
   ) = this(errorHandler, Prova_0, Assets_1, "/")
 
@@ -38,10 +38,9 @@ class Routes(
   }
 
   def documentation = List(
-    ("""GET""", this.prefix, """controllers.Prova.p1()"""),
-    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """p2""", """controllers.Prova.p2()"""),
-    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """p2""", """controllers.Prova.p2()"""),
-    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """p4""", """controllers.Prova.p4()"""),
+    ("""GET""", this.prefix, """controllers.Prova.home()"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """minAttribute""", """controllers.Prova.postMinAttribute()"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """minAttribute""", """controllers.Prova.getMinAttribute()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
@@ -51,15 +50,15 @@ class Routes(
 
 
   // @LINE:6
-  private[this] lazy val controllers_Prova_p10_route = Route("GET",
+  private[this] lazy val controllers_Prova_home0_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix)))
   )
-  private[this] lazy val controllers_Prova_p10_invoker = createInvoker(
-    Prova_0.p1(),
+  private[this] lazy val controllers_Prova_home0_invoker = createInvoker(
+    Prova_0.home(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.Prova",
-      "p1",
+      "home",
       Nil,
       "GET",
       this.prefix + """""",
@@ -69,64 +68,46 @@ class Routes(
   )
 
   // @LINE:7
-  private[this] lazy val controllers_Prova_p21_route = Route("POST",
-    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("p2")))
+  private[this] lazy val controllers_Prova_postMinAttribute1_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("minAttribute")))
   )
-  private[this] lazy val controllers_Prova_p21_invoker = createInvoker(
-    Prova_0.p2(),
+  private[this] lazy val controllers_Prova_postMinAttribute1_invoker = createInvoker(
+    Prova_0.postMinAttribute(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.Prova",
-      "p2",
+      "postMinAttribute",
       Nil,
       "POST",
-      this.prefix + """p2""",
+      this.prefix + """minAttribute""",
       """""",
       Seq()
     )
   )
 
   // @LINE:8
-  private[this] lazy val controllers_Prova_p22_route = Route("GET",
-    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("p2")))
+  private[this] lazy val controllers_Prova_getMinAttribute2_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("minAttribute")))
   )
-  private[this] lazy val controllers_Prova_p22_invoker = createInvoker(
-    Prova_0.p2(),
+  private[this] lazy val controllers_Prova_getMinAttribute2_invoker = createInvoker(
+    Prova_0.getMinAttribute(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.Prova",
-      "p2",
+      "getMinAttribute",
       Nil,
       "GET",
-      this.prefix + """p2""",
+      this.prefix + """minAttribute""",
       """""",
       Seq()
     )
   )
 
-  // @LINE:9
-  private[this] lazy val controllers_Prova_p43_route = Route("GET",
-    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("p4")))
-  )
-  private[this] lazy val controllers_Prova_p43_invoker = createInvoker(
-    Prova_0.p4(),
-    play.api.routing.HandlerDef(this.getClass.getClassLoader,
-      "router",
-      "controllers.Prova",
-      "p4",
-      Nil,
-      "GET",
-      this.prefix + """p4""",
-      """""",
-      Seq()
-    )
-  )
-
-  // @LINE:16
-  private[this] lazy val controllers_Assets_versioned4_route = Route("GET",
+  // @LINE:15
+  private[this] lazy val controllers_Assets_versioned3_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("assets/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_versioned4_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_versioned3_invoker = createInvoker(
     Assets_1.versioned(fakeValue[String], fakeValue[Asset]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -144,33 +125,27 @@ class Routes(
   def routes: PartialFunction[RequestHeader, Handler] = {
   
     // @LINE:6
-    case controllers_Prova_p10_route(params@_) =>
+    case controllers_Prova_home0_route(params@_) =>
       call { 
-        controllers_Prova_p10_invoker.call(Prova_0.p1())
+        controllers_Prova_home0_invoker.call(Prova_0.home())
       }
   
     // @LINE:7
-    case controllers_Prova_p21_route(params@_) =>
+    case controllers_Prova_postMinAttribute1_route(params@_) =>
       call { 
-        controllers_Prova_p21_invoker.call(Prova_0.p2())
+        controllers_Prova_postMinAttribute1_invoker.call(Prova_0.postMinAttribute())
       }
   
     // @LINE:8
-    case controllers_Prova_p22_route(params@_) =>
+    case controllers_Prova_getMinAttribute2_route(params@_) =>
       call { 
-        controllers_Prova_p22_invoker.call(Prova_0.p2())
+        controllers_Prova_getMinAttribute2_invoker.call(Prova_0.getMinAttribute())
       }
   
-    // @LINE:9
-    case controllers_Prova_p43_route(params@_) =>
-      call { 
-        controllers_Prova_p43_invoker.call(Prova_0.p4())
-      }
-  
-    // @LINE:16
-    case controllers_Assets_versioned4_route(params@_) =>
+    // @LINE:15
+    case controllers_Assets_versioned3_route(params@_) =>
       call(Param[String]("path", Right("/public")), params.fromPath[Asset]("file", None)) { (path, file) =>
-        controllers_Assets_versioned4_invoker.call(Assets_1.versioned(path, file))
+        controllers_Assets_versioned3_invoker.call(Assets_1.versioned(path, file))
       }
   }
 }

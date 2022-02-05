@@ -19,22 +19,20 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
   import session.implicits._
 
   //cerca le stazioni che hanno registrato la misura massima nel mese fissato
-  def maxM(mese: String,misura:String) : DataFrame ={
+  def maxM(mese: String,misura:String) : Array[Row] ={
 
-    val dataframe = session.read.option("header","true").csv("Dataset\\QCLCD"+mese+"\\"+mese+"daily.txt")
+    val dataframe = session.read.option("header","true").csv("Dataset\\QCLCD2013"+mese+"\\2013"+mese+"daily.txt")
     val colonnaT = dataframe.withColumn("Tmax", col(misura).cast("int")).agg(functions.max(misura) ).first().get(0)
     val colonna2T= dataframe.filter(dataframe(misura)===colonnaT).select("WBAN","Date",misura)
-    colonna2T.show(10)
-    return colonna2T
+    colonna2T.collect()
   }
 
-  def minM(mese: String,misura:String) : DataFrame ={
+  def minM(mese: String,misura:String) : Array[Row] ={
 
-    val dataframe = session.read.option("header","true").csv("Dataset\\QCLCD"+mese+"\\"+mese+"daily.txt")
+    val dataframe = session.read.option("header","true").csv("Dataset\\QCLCD2013"+mese+"\\2013"+mese+"daily.txt")
     val colonnaT = dataframe.withColumn("Tmin", col(misura).cast("int")).agg(functions.min(misura) ).first().get(0)
     val colonna2T= dataframe.filter(dataframe(misura)===colonnaT).select("WBAN","Date",misura)
-    colonna2T.show(10)
-    colonna2T
+    colonna2T.collect().
   }
 
   // periodo temporale di una determinata misura di una stazione
@@ -161,17 +159,12 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     val d13f= session.read
      .option("header", "true").option("inferSchema", "true")
      .csv("C:\\Users\\marmo\\BigDataa\\Dataset\\predictor")
-    val d13c=d13f.withColumn("WBAN",col("WBAN").cast("int")).withColumn("YearMonthDay",col("YearMonthDay").cast("int"))
-      .withColumn("Tmax",col("Tmax").cast("double")).withColumn("Tmin",col("Tmin").cast("double"))
-      .withColumn("Tavg",col("Tavg").cast("double")).withColumn("PrecipTotal",col("PrecipTotal").cast("double"))
-      .withColumn("AvgSpeed",col("AvgSpeed").cast("double")).withColumn("TmaxPred",col("TmaxPred").cast("double"))
-      .withColumn("TminPred",col("TminPred").cast("double"))
+
     val v=new VectorAssembler().setInputCols(Array("WBAN","YearMonthDay","Tmax","Tmin","Tavg","PrecipTotal","AvgSpeed")).setOutputCol("features")
-    val features= v.transform(d13c).select("WBAN","features",misura+"Pred")
-    features.cache()
+    val features= v.transform(d13f).select("WBAN","features",misura+"Pred")
     val lr=new DecisionTreeRegressor().setLabelCol(misura+"Pred")
 
-    val paramGrid= new ParamGridBuilder().addGrid(lr.maxDepth,Array(14,22)).addGrid(lr.maxBins,Array(35)).addGrid(lr.minInfoGain,Array(0.1)).build()
+    val paramGrid= new ParamGridBuilder().addGrid(lr.maxDepth,Array(14,15)).addGrid(lr.maxBins,Array(35)).addGrid(lr.minInfoGain,Array(0.1)).build()
     val eval= new RegressionEvaluator().setLabelCol(misura+"Pred")
     val cv= new CrossValidator().setEstimator(lr).setEvaluator(eval).setEstimatorParamMaps(paramGrid).setNumFolds(4)
 
@@ -216,7 +209,7 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     val d13r=byStationArray.map(x=>imputer.fit(x).transform(x))
     val d13f=d13r.reduce(_ union _).sort("WBAN","YearMonthDay")
     d13f.cache()
-    val save= d13f.coalesce(1).write.format("com.databricks.spark.csv")
+    d13f.coalesce(1).write.format("com.databricks.spark.csv")
       .option("header", "true")
       .save("C:\\Users\\marmo\\BigDataa\\Dataset\\predictor")
     d13f
@@ -231,8 +224,7 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
       .setStrategy("mean")
     val d13r=byStationArray.map(x=>imputer.fit(x).transform(x))
     val d13f=d13r.reduce(_ union _).sort("WBAN","YearMonthDay")
-    d13f.cache()
-    val save= d13f.coalesce(1).write.format("com.databricks.spark.csv")
+    d13f.coalesce(1).write.format("com.databricks.spark.csv")
       .option("header", "true")
       .save("C:\\Users\\marmo\\BigDataa\\Dataset\\"+nome)
     d13f
@@ -242,9 +234,12 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     val pred=dataFrame.select("Tmax","Tmin").withColumnRenamed("Tmax","TmaxPred").withColumnRenamed("Tmin","TminPred")
     val tail=dataFrame.tail(1).head
     val d2=dataFrame.filter(row => row!=tail).withColumn("id",monotonically_increasing_id())
+    d2.show()
     val head=pred.head()
     val pred2=pred.filter(row=>row!=head).withColumn("id",monotonically_increasing_id())
-    val d3=d2.join(pred2,d2("id")===pred2("id"),"inner").drop("id").filter(col("YearMonthDay")=!="20141231")
+    pred2.show()
+    val d3=d2.join(pred2,d2("id")===pred2("id"),"inner").drop("id").filter(col("YearMonthDay")=!="20141231").sort("WBAN","YearMonthDay")
+    d3.show()
     d3.coalesce(1).write.format("com.databricks.spark.csv")
       .option("header", "true")
       .save("C:\\Users\\marmo\\BigDataa\\Dataset\\"+nome)

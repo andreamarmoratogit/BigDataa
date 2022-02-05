@@ -18,8 +18,8 @@ package controllers.javascript {
 
   
     // @LINE:6
-    def p1: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.Prova.p1",
+    def home: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.home",
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + """"})
@@ -28,32 +28,28 @@ package controllers.javascript {
     )
   
     // @LINE:7
-    def p2: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.Prova.p2",
+    def postMinAttribute: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.postMinAttribute",
       """
         function() {
-        
-          if (true) {
-            return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "p2"})
-          }
-        
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "minAttribute"})
         }
       """
     )
   
-    // @LINE:9
-    def p4: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.Prova.p4",
+    // @LINE:8
+    def getMinAttribute: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.getMinAttribute",
       """
         function() {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "p4"})
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "minAttribute"})
         }
       """
     )
   
   }
 
-  // @LINE:16
+  // @LINE:15
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -61,7 +57,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:16
+    // @LINE:15
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

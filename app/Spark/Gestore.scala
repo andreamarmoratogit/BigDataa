@@ -14,6 +14,7 @@ import org.apache.spark.sql.{DataFrame, Dataset, Encoders, Row, SaveMode, SparkS
 import spire.implicits.eqOps
 
 import scala.Seq
+case class Minmax(name:String,lat:Double,lon:Double){}
 
 class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkConf ) {
   import session.implicits._
@@ -26,13 +27,16 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     val colonna2T= dataframe.filter(dataframe(misura)===colonnaT).select("WBAN","Date",misura)
     colonna2T.collect()
   }
-
-  def minM(mese: String,misura:String) : Array[Row] ={
+  def minM(mese: String,misura:String) : DataFrame ={
 
     val dataframe = session.read.option("header","true").csv("Dataset\\QCLCD2013"+mese+"\\2013"+mese+"daily.txt")
+    val stations = session.read.option("header","true").option("delimiter","|").csv("Dataset\\QCLCD2013"+mese+"\\2013"+mese+"station.txt")
+      .select("WBAN","latitude","longitude").withColumnRenamed("WBAN","name")
+      .withColumnRenamed("latitude","lat").withColumnRenamed("longitude","lon")
     val colonnaT = dataframe.withColumn("Tmin", col(misura).cast("int")).agg(functions.min(misura) ).first().get(0)
     val colonna2T= dataframe.filter(dataframe(misura)===colonnaT).select("WBAN","Date",misura)
-    colonna2T.collect().
+    val c=colonna2T.join(stations,colonna2T("WBAN")===stations("name"),"left").drop("WBAN")
+    c
   }
 
   // periodo temporale di una determinata misura di una stazione

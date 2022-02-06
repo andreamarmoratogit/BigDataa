@@ -1,35 +1,25 @@
 
-@import org.apache.spark.sql.Row
-@(query:Form[Query])(ret:Array[Row])(implicit messages: MessagesRequestHeader)
+@import org.apache.spark.sql.DataFrame
+@import org.apache.spark.sql.Dataset
+@import play.api.libs.json.JsValue
+@import org.json4s.jackson.Json
+@(query:Form[Query])(dati:String)(implicit messages: MessagesRequestHeader)
 <!doctype html>
 @main{
-    <script type="text/javascript">
-        console.log(@ret.head.get(0))
-    </script>
-    <script type="text/javascript">
-            google.charts.load('current', {
-                'packages':['geochart'],
-            });
-            google.charts.setOnLoadCallback(drawRegionsMap);
+    <!--[{
+    name: 'London',
+    lat: 35.695,
+    lon: -101.395,
 
-            function drawRegionsMap() {
-                var data = google.visualization.arrayToDataTable([
-                    ['Country', 'Popularity'],
-                    ['Germany', 200],
-                    ['United States', 300],
-                    ['Brazil', 400],
-                    ['Canada', 500],
-                    ['France', 600],
-                    ['RU', 700]
-                ]);
+    "name": 'London',
+    "lat": "35.695",
+    "lon": "-101.395",
+    }]-->
 
-                var options = {};
 
-                var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
 
-                chart.draw(data, options);
-            }
-    </script>
+
+
     <div class="position-absolute top-0 start-1">
         <form method="post" action="@routes.Prova.postMinAttribute()">
             @helper.CSRF.formField
@@ -59,10 +49,57 @@
         </form>
     </div>
     <div class="container ">
-        <div  id="regions_div" style="width: 900px; height: 500px;"></div>
+        <div id="container"></div>
+
+
     </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/mapdata/custom/usa-and-canada.js"></script>
 
+<script>
+        Highcharts.mapChart('container', {
+
+            chart: {
+                map: 'custom/usa-and-canada'
+            },
+
+            title: {
+                text: 'Highmaps basic lat/lon demo'
+            },
+
+            mapNavigation: {
+                enabled: true
+            },
+
+            tooltip: {
+                headerFormat: '',
+                pointFormat: '<b>{point.name}</b><br>Lat: {point.lat}, Lon: {point.lon}'
+            },
+
+            series: [{
+                // Use the gb-all map with no data as a basemap
+                name: 'Basemap',
+                borderColor: '#A0A0A0',
+                nullColor: 'rgba(200, 200, 200, 0.3)',
+                showInLegend: false
+            }, {
+                name: 'Separators',
+                type: 'mapline',
+                nullColor: '#707070',
+                showInLegend: false,
+                enableMouseTracking: false
+            }, {
+                // Specify points using lat/lon
+                type: 'mappoint',
+                name: 'Cities',
+                color: Highcharts.getOptions().colors[1],
+                data: @Html(dati.toString)
+            }]
+        });
+</script>
 
 
 }

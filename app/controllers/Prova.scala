@@ -1,12 +1,14 @@
 package controllers
 
-import Spark.Gestore
+import Spark.{Gestore, Minmax}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkContext}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.inject.ApplicationLifecycle
 import play.api.mvc._
+import play.api.libs.json._
+import play.twirl.api.Html
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
@@ -35,7 +37,7 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
     Ok(views.html.home())
   }
   def getMinAttribute(): Action[AnyContent] = Action { implicit Request =>
-    Ok(views.html.minAttribute(minMaxAttr)(null))
+    Ok(views.html.minAttribute(minMaxAttr)("[]"))
   }
   def postMinAttribute(): Action[AnyContent] = Action{ implicit Request =>
     minMaxAttr.bindFromRequest().fold(
@@ -50,7 +52,19 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
         q.misura match {
           case "Temperatura Max" => misura="Tmax"
         }
-        val ret=g.minM(mese,misura)
+        /*implicit val MinmaxWrites = new Writes[Minmax] {
+          def writes(q:Minmax) = Json.obj(
+            "name"->q.name,
+            "lat"-> q.lat,
+            "lon"-> q.lon
+          )
+        }*/
+        //val ret=g.minM(mese,misura).reduce((a1,a2)=>a1+","+a2)
+        val ret =g.minM(mese,misura).select("name","lat","lon").toJSON.collectAsList().toString
+        //println(ret)
+        //val ret = Minmax("94059",48.4887,-105.2096)
+        //val json=Json.toJson(ret)
+
         Ok(views.html.minAttribute(minMaxAttr)(ret))
       })
   }

@@ -9,5 +9,5 @@ object Server extends App {
   val sc=new SparkContext(conf)
   val ss=SparkSession.builder().getOrCreate()
   val g=new Gestore(sc,ss,conf)
-  g.predictor2("Tmax")
+  g.getStationsM()
 }

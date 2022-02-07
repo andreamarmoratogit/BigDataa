@@ -1,4 +1,4 @@
-@(query:Form[Query])(stations:String)(res:String)(implicit messages: MessagesRequestHeader)
+@(query:Form[MTQ])(stations:String)(res:String)(implicit messages: MessagesRequestHeader)
 <!doctype html>
 @main{
 
@@ -35,12 +35,6 @@
             chart: {
                 map: 'custom/north-america-no-central'
             },
-            title: {
-                text: 'European Train Stations Near Airports'
-            },
-            subtitle: {
-                text: ''
-            },
             mapNavigation: {
                 enabled: true
             },
@@ -49,8 +43,8 @@
                 pointFormat: '<b>{point.name}</b><br>Lat: {point.lat:.2f}, Lon: {point.lon:.2f}'
             },
             colorAxis: {
-                min: 0,
-                max: 20
+                min: 1,
+                max: 100
             },
             plotOptions: {
                 mappoint: {

@@ -27,12 +27,32 @@ package controllers.javascript {
       """
     )
   
+    // @LINE:12
+    def postMediaAnnuale: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.postMediaAnnuale",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "mediaAnnuale"})
+        }
+      """
+    )
+  
     // @LINE:8
     def getMinAttribute: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Prova.getMinAttribute",
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "minAttribute"})
+        }
+      """
+    )
+  
+    // @LINE:11
+    def getMediaAnnuale: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.getMediaAnnuale",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "mediaAnnuale"})
         }
       """
     )
@@ -69,7 +89,7 @@ package controllers.javascript {
   
   }
 
-  // @LINE:14
+  // @LINE:17
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -77,7 +97,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:14
+    // @LINE:17
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

@@ -1,0 +1,148 @@
+@(form:Form[MA])(stations:String)(res:Array[Double])(implicit messages: MessagesRequestHeader)
+<!doctype html>
+
+@main {
+    <div class="position-absolute top-0 start-1">
+        <form method="post" action="@routes.Prova.postMediaAnnuale()">
+            @helper.CSRF.formField
+            <div class="form-select">
+                <label for="Selector">Mese</label>
+                <select class="form-control" id="Selector" name="misura" >
+                    <option>AvgMaxTemp</option>
+                    <option>AvgMinTemp</option>
+                    <option>AvgTemp</option>
+                    <option>TotalMonthlyPrecip</option>
+                    <option>ResultantWindSpeed</option>
+                    <option>AvgWindSpeed</option>
+                </select>
+            </div>
+            <br>
+            <input class="form-control" id="stazione" type="text" name="stazione" value="" aria-label="readonly input example" readonly>
+            <br>
+            <input type="submit" id="button">
+        </form>
+    </div>
+
+    <div class="container" id="container"></div>
+    <div class="container" id="container2"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/mapdata/custom/north-america-no-central.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/marker-clusters.js"></script>
+    <script src="https://code.highcharts.com/modules/coloraxis.js"></script>
+
+    <script>
+            const chart=Highcharts.mapChart('container', {
+                chart: {
+                    map: 'custom/north-america-no-central'
+                },
+                mapNavigation: {
+                    enabled: true
+                },
+                tooltip: {
+                    headerFormat: '',
+                    pointFormat: '<b>{point.name}</b><br>Lat: {point.lat:.2f}, Lon: {point.lon:.2f}'
+                },
+                colorAxis: {
+                    min: 1,
+                    max: 100
+                },
+                plotOptions: {
+                    mappoint: {
+                        cluster: {
+                            enabled: true,
+                            allowOverlap: false,
+                            animation: {
+                                duration: 450
+                            },
+                            layoutAlgorithm: {
+                                type: 'grid',
+                                gridSize: 70
+                            },
+                            zones: [{
+                                from: 1,
+                                to: 19,
+                                marker: {
+                                    radius: 15
+                                }
+                            }, {
+                                from: 20,
+                                to: 49,
+                                marker: {
+                                    radius: 18
+                                }
+                            }, {
+                                from: 50,
+                                to: 99,
+                                marker: {
+                                    radius: 20
+                                }
+                            }, {
+                                from: 100,
+                                to: 149,
+                                marker: {
+                                    radius: 22
+                                }
+                            }, {
+                                from: 150,
+                                to: 200,
+                                marker: {
+                                    radius: 25
+                                }
+                            }]
+                        }
+                    },
+                    series:{
+                        allowPointSelect: true,
+                        turboThreshold: 0,
+                        cursor: 'pointer',
+                        point: {
+                            events: {
+                                click: function () {
+                                    $('#stazione').val(this.name)
+                                }
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Basemap',
+                    borderColor: '#A0A0A0',
+                    nullColor: 'rgba(177, 244, 177, 0.5)',
+                    showInLegend: false
+                }, {
+                    type: 'mappoint',
+                    enableMouseTracking: true,
+                    colorKey: 'clusterPointsAmount',
+                    name: 'Cities',
+                    data: @Html(stations.toString)
+                }]
+            });
+    </script>
+
+    <script>
+        var d=[]
+        @for(x <- res){
+        d.push(@x)
+        }
+        const chart2 = Highcharts.chart('container2', {
+            title: {
+                text: 'Grafico'
+            },
+            xAxis: {
+                categories: ['min', 'Stazione selezionata', 'max']
+            },
+            series: [{
+                type: 'column',
+                colorByPoint: true,
+                data: d,
+                showInLegend: false
+            }]
+        });
+
+    </script>
+
+}

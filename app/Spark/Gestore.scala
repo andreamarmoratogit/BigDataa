@@ -100,14 +100,16 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
   }
 
 //AvgMaxTemp AvgMinTemp AvgTemp TotalMonthlyPrecip ResultantWindSpeed AvgWindSpeed
-  def stagioni(stazione:String,misura:String):Unit= {
-    val monthly=session.read.option("header", "true").csv("Dataset\\QCLCD" + "201301" + "\\" + "201301" + "monthly.txt").union(
-      session.read.option("header", "true").csv("Dataset\\QCLCD" + "201307" + "\\" + "201307" + "monthly.txt")
-    ).select("WBAN", misura).filter(col(misura)=!="M").withColumn(misura, col(misura).cast(DoubleType) alias(misura))
-    .groupBy("WBAN").avg(misura).sort("avg("+misura+")")
+  def stagioni(stazione:String,misura:String):DataFrame= {
+    val monthly=session.read.option("header", "true").option("inferSchema", "true").csv("Dataset\\Monthly")
+      .groupBy("WBAN").agg(avg(misura).alias(misura))
     monthly.cache()
-    //println(Seq(monthly.filter(monthly("WBAN")===stazione).first(),monthly.first(),monthly.tail(1).head).toString())
-    val ret= monthly.filter(monthly("WBAN")===stazione).union(session.createDataFrame(List((monthly.first(),monthly.tail(1).head),monthly.schema)))
+    val m=monthly.agg(max(misura),min(misura))
+    monthly.join(m, monthly("WBAN") === stazione)
+  }
+
+  def getStationsM():DataFrame={
+    session.read.option("header", "true").option("inferSchema", "true").csv("Dataset\\Stations")
   }
 
   def getTempForMap():Unit={
@@ -226,14 +228,14 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
   }
 
   def preprocessing(dataFrame: DataFrame,nome:String): DataFrame ={
-    val stations = dataFrame.select("YearMonthDay").distinct.collect.flatMap(_.toSeq)
-    val byStationArray = stations.map(state => dataFrame.where($"YearMonthDay" <=> state))
+    val stations = dataFrame.select("YearMonth").distinct.collect.flatMap(_.toSeq)
+    val byStationArray = stations.map(state => dataFrame.where($"YearMonth" <=> state))
     val imputer = new Imputer()
       .setInputCols(dataFrame.columns)
       .setOutputCols(dataFrame.columns.map(c => s"${c}"))
       .setStrategy("mean")
     val d13r=byStationArray.map(x=>imputer.fit(x).transform(x))
-    val d13f=d13r.reduce(_ union _).sort("WBAN","YearMonthDay")
+    val d13f=d13r.reduce(_ union _).sort("WBAN","YearMonth")
     d13f.coalesce(1).write.format("com.databricks.spark.csv")
       .option("header", "true")
       .save("C:\\Users\\marmo\\BigDataa\\Dataset\\"+nome)

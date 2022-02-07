@@ -36,7 +36,6 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
         <link rel="stylesheet" href=""""),_display_(/*12.39*/routes/*12.45*/.Assets.versioned("stylesheets/jquery-ui.structure.css")),format.raw/*12.101*/("""">
         <script type="text/javascript" src=""""),_display_(/*13.46*/routes/*13.52*/.Assets.versioned("javascripts/jquery.js")),format.raw/*13.94*/(""""></script>
         <script type="text/javascript" src=""""),_display_(/*14.46*/routes/*14.52*/.Assets.versioned("javascripts/jquery-ui.js")),format.raw/*14.97*/(""""></script>
-        <script type='text/javascript' src=""""),_display_(/*15.46*/routes/*15.52*/.Assets.versioned("javascripts/googlechart.js")),format.raw/*15.99*/(""""></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     </head>
@@ -50,18 +49,19 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href=""""),_display_(/*29.52*/routes/*29.58*/.Prova.home()),format.raw/*29.71*/("""">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href=""""),_display_(/*28.52*/routes/*28.58*/.Prova.home()),format.raw/*28.71*/("""">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Query
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href=""""),_display_(/*36.61*/routes/*36.67*/.Prova.getMinAttribute()),format.raw/*36.91*/("""">Min Attribute</a>
+                            <a class="dropdown-item" href=""""),_display_(/*35.61*/routes/*35.67*/.Prova.getMinAttribute()),format.raw/*35.91*/("""">Min Attribute</a>
                             <a class="dropdown-item" href="#">Max Attribute</a>
-                            <a class="dropdown-item" href=""""),_display_(/*38.61*/routes/*38.67*/.Prova.getMeteoTemporale()),format.raw/*38.93*/("""">Meteo temporale</a>
+                            <a class="dropdown-item" href=""""),_display_(/*37.61*/routes/*37.67*/.Prova.getMeteoTemporale()),format.raw/*37.93*/("""">Meteo temporale</a>
                             <a class="dropdown-item" href="#">Time Series</a>
                             <a class="dropdown-item" href="#">Cartina colorata</a>
+                            <a class="dropdown-item" href=""""),_display_(/*40.61*/routes/*40.67*/.Prova.getMediaAnnuale()),format.raw/*40.91*/("""">Media Annuale</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -105,9 +105,9 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
               /*
                   -- GENERATED --
                   SOURCE: app/views/main.scala.html
-                  HASH: 7886ea418d04c5b21dff151efd87ad75f8a0e94d
-                  MATRIX: 726->1|834->16|1090->246|1104->252|1170->298|1238->339|1253->345|1315->386|1383->427|1398->433|1471->485|1539->526|1554->532|1632->588|1707->636|1722->642|1785->684|1869->741|1884->747|1950->792|2034->849|2049->855|2117->902|3043->1801|3058->1807|3092->1820|3615->2316|3630->2322|3675->2346|3862->2506|3877->2512|3924->2538|4913->3500|4941->3507|4979->3518
-                  LINES: 21->1|26->2|33->9|33->9|33->9|34->10|34->10|34->10|35->11|35->11|35->11|36->12|36->12|36->12|37->13|37->13|37->13|38->14|38->14|38->14|39->15|39->15|39->15|53->29|53->29|53->29|60->36|60->36|60->36|62->38|62->38|62->38|81->57|81->57|84->60
+                  HASH: d0f8f03af3ac54ecd35e09ae60c5690903105260
+                  MATRIX: 726->1|834->16|1090->246|1104->252|1170->298|1238->339|1253->345|1315->386|1383->427|1398->433|1471->485|1539->526|1554->532|1632->588|1707->636|1722->642|1785->684|1869->741|1884->747|1950->792|2876->1691|2891->1697|2925->1710|3448->2206|3463->2212|3508->2236|3695->2396|3710->2402|3757->2428|4027->2671|4042->2677|4087->2701|4913->3500|4941->3507|4979->3518
+                  LINES: 21->1|26->2|33->9|33->9|33->9|34->10|34->10|34->10|35->11|35->11|35->11|36->12|36->12|36->12|37->13|37->13|37->13|38->14|38->14|38->14|52->28|52->28|52->28|59->35|59->35|59->35|61->37|61->37|61->37|64->40|64->40|64->40|81->57|81->57|84->60
                   -- GENERATED --
               */
           

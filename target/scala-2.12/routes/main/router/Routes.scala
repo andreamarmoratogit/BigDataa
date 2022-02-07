@@ -14,7 +14,7 @@ class Routes(
   override val errorHandler: play.api.http.HttpErrorHandler, 
   // @LINE:6
   Prova_0: controllers.Prova,
-  // @LINE:14
+  // @LINE:17
   Assets_1: controllers.Assets,
   val prefix: String
 ) extends GeneratedRouter {
@@ -23,7 +23,7 @@ class Routes(
    def this(errorHandler: play.api.http.HttpErrorHandler,
     // @LINE:6
     Prova_0: controllers.Prova,
-    // @LINE:14
+    // @LINE:17
     Assets_1: controllers.Assets
   ) = this(errorHandler, Prova_0, Assets_1, "/")
 
@@ -43,6 +43,8 @@ class Routes(
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """minAttribute""", """controllers.Prova.getMinAttribute()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """meteoTempo""", """controllers.Prova.getMeteoTemporale()"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """meteoTempo""", """controllers.Prova.postMeteoTemporale()"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """mediaAnnuale""", """controllers.Prova.getMediaAnnuale()"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """mediaAnnuale""", """controllers.Prova.postMediaAnnuale()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
@@ -141,11 +143,47 @@ class Routes(
     )
   )
 
-  // @LINE:14
-  private[this] lazy val controllers_Assets_versioned5_route = Route("GET",
+  // @LINE:11
+  private[this] lazy val controllers_Prova_getMediaAnnuale5_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("mediaAnnuale")))
+  )
+  private[this] lazy val controllers_Prova_getMediaAnnuale5_invoker = createInvoker(
+    Prova_0.getMediaAnnuale(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "getMediaAnnuale",
+      Nil,
+      "GET",
+      this.prefix + """mediaAnnuale""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:12
+  private[this] lazy val controllers_Prova_postMediaAnnuale6_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("mediaAnnuale")))
+  )
+  private[this] lazy val controllers_Prova_postMediaAnnuale6_invoker = createInvoker(
+    Prova_0.postMediaAnnuale(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "postMediaAnnuale",
+      Nil,
+      "POST",
+      this.prefix + """mediaAnnuale""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:17
+  private[this] lazy val controllers_Assets_versioned7_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("assets/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_versioned5_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_versioned7_invoker = createInvoker(
     Assets_1.versioned(fakeValue[String], fakeValue[Asset]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -192,10 +230,22 @@ class Routes(
         controllers_Prova_postMeteoTemporale4_invoker.call(Prova_0.postMeteoTemporale())
       }
   
-    // @LINE:14
-    case controllers_Assets_versioned5_route(params@_) =>
+    // @LINE:11
+    case controllers_Prova_getMediaAnnuale5_route(params@_) =>
+      call { 
+        controllers_Prova_getMediaAnnuale5_invoker.call(Prova_0.getMediaAnnuale())
+      }
+  
+    // @LINE:12
+    case controllers_Prova_postMediaAnnuale6_route(params@_) =>
+      call { 
+        controllers_Prova_postMediaAnnuale6_invoker.call(Prova_0.postMediaAnnuale())
+      }
+  
+    // @LINE:17
+    case controllers_Assets_versioned7_route(params@_) =>
       call(Param[String]("path", Right("/public")), params.fromPath[Asset]("file", None)) { (path, file) =>
-        controllers_Assets_versioned5_invoker.call(Assets_1.versioned(path, file))
+        controllers_Assets_versioned7_invoker.call(Assets_1.versioned(path, file))
       }
   }
 }

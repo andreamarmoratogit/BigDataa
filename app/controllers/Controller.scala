@@ -14,7 +14,7 @@ import java.util.StringTokenizer
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
-
+case class MA(stazione:String,misura:String){}
 case class Query (mese: String,misura: String){}
 case class MTQ(dataIn:String,dataFin:String,stazione:String){}
 @Singleton
@@ -38,6 +38,10 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
     "stazione" -> text
   )(MTQ.apply)(MTQ.unapply))
 
+  val maForm: Form[MA]= Form(mapping(
+    "stazione" -> text,
+    "misura" -> text
+  )(MA.apply)(MA.unapply))
 
 
   def home(): Action[AnyContent] = Action { implicit Request =>
@@ -77,11 +81,11 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
   }
 
   def getMeteoTemporale(): Action[AnyContent] =Action{ implicit Request =>
-    val s=g.getStations().toJSON.collectAsList().toString
-    Ok(views.html.meteo_tempo(minMaxAttr)(s)("[]"))
+    val s=g.getStationsM().toJSON.collectAsList().toString
+    Ok(views.html.meteo_tempo(mtForm)(s)("[]"))
   }
   def postMeteoTemporale(): Action[AnyContent] =Action{ implicit Request =>
-    val s=g.getStations().toJSON.collectAsList().toString
+    val s=g.getStationsM().toJSON.collectAsList().toString
     mtForm.bindFromRequest().fold(
       error => BadRequest(""),
       q => {
@@ -91,16 +95,28 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
         val d=g.percentuale(q.stazione,new DataF(st(0),st(1),st(2)),new DataF(st2(0),st2(1),st2(2)))
         d.show()
 
-        Ok(views.html.meteo_tempo(minMaxAttr)(s)(d.toJSON.collectAsList().toString))}
+        Ok(views.html.meteo_tempo(mtForm)(s)(d.toJSON.collectAsList().toString))}
     )
   }
 
-  def p3(): Action[AnyContent] = Action { implicit Request =>
-    minMaxAttr.bindFromRequest().fold(
+  def getMediaAnnuale(): Action[AnyContent] = Action { implicit Request =>
+    val s=g.getStationsM().toJSON.collectAsList().toString
+    Ok(views.html.mediaAnnuale(maForm)(s)(Array(0.0)))
+
+  }
+  def postMediaAnnuale(): Action[AnyContent] = Action { implicit Request =>
+    import ss.implicits._
+    val s=g.getStationsM().toJSON.collectAsList().toString
+    maForm.bindFromRequest().fold(
       error => BadRequest(""),
-      q => Ok(views.html.prova())
+      q => {
+        val d=g.stagioni(q.stazione,q.misura).drop("WBAN").as[(Double,Double,Double)]
+        d.show()
+
+        Ok(views.html.mediaAnnuale(maForm)(s)(Array(d.head()._3,d.head()._1,d.head()._2)))}
     )
   }
+
 
 
 }

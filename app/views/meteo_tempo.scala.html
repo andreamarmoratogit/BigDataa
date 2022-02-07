@@ -1,4 +1,4 @@
-@(query:Form[Query])(implicit messages: MessagesRequestHeader)
+@(query:Form[Query])(stations:String)(implicit messages: MessagesRequestHeader)
 <!doctype html>
 @main{
 
@@ -9,6 +9,9 @@
         <br>
         <h4 class="demoHeaders">Data Finale</h4>
         <input type="text" id="datepicker2">
+        <br>
+        <input type="submit" id="button">
+
     </div>
 
     <script type="text/javascript">
@@ -22,7 +25,7 @@
                     ['Commute',  2],
                     ['Watch TV', 2],
                     ['Sleep',    7]
-                ]);
+            ]);
 
                 var options = {
                     title: 'My Daily Activities',
@@ -34,42 +37,112 @@
             }
     </script>
 
-    <html lang="en">
-        <head>
-            <meta charset="utf-8">
-            <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/openlayers.css")">
-            <style>
-                    .map {
-                        height: 400px;
-                        width: 100%;
-                    }
-            </style>
-            <script type="text/javascript" src="@routes.Assets.versioned("javascripts/openlayers.js")"></script>
-            <title>OpenLayers example</title>
-        </head>
-        <body>
-            <h2>My Map</h2>
-            <div id="map" class="map"></div>
-            <script type="text/javascript">
-                    var map = new ol.Map({
-                        target: 'map',
-                        layers: [
-                            new ol.layer.Tile({
-                                source: new ol.source.OSM()
-                            })
-                        ],
-                        view: new ol.View({
-                            center: ol.proj.fromLonLat([37.41, 8.82]),
-                            zoom: 4
-                        })
-                    });
-            </script>
-        </body>
-    </html>
+
+    <div class="container" id="container"></div>
+
     <div class="container">
         <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
     </div>
 
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/mapdata/custom/north-america-no-central.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/marker-clusters.js"></script>
+    <script src="https://code.highcharts.com/modules/coloraxis.js"></script>
+    <script>
+            const chart=Highcharts.mapChart('container', {
+                chart: {
+                    map: 'custom/north-america-no-central'
+                },
+                title: {
+                    text: 'European Train Stations Near Airports'
+                },
+                subtitle: {
+                    text: ''
+                },
+                mapNavigation: {
+                    enabled: true
+                },
+                tooltip: {
+                    headerFormat: '',
+                    pointFormat: '<b>{point.name}</b><br>Lat: {point.lat:.2f}, Lon: {point.lon:.2f}'
+                },
+                colorAxis: {
+                    min: 0,
+                    max: 20
+                },
+                plotOptions: {
+                    mappoint: {
+                        cluster: {
+                            enabled: true,
+                            allowOverlap: false,
+                            animation: {
+                                duration: 450
+                            },
+                            layoutAlgorithm: {
+                                type: 'grid',
+                                gridSize: 70
+                            },
+                            zones: [{
+                                from: 1,
+                                to: 19,
+                                marker: {
+                                    radius: 15
+                                }
+                            }, {
+                                from: 20,
+                                to: 49,
+                                marker: {
+                                    radius: 18
+                                }
+                            }, {
+                                from: 50,
+                                to: 99,
+                                marker: {
+                                    radius: 20
+                                }
+                            }, {
+                                from: 100,
+                                to: 149,
+                                marker: {
+                                    radius: 22
+                                }
+                            }, {
+                                from: 150,
+                                to: 200,
+                                marker: {
+                                    radius: 25
+                                }
+                            }]
+                        }
+                    },
+                    series:{
+                        allowPointSelect: true,
+                        turboThreshold: 0
+                    }
+                },
+                series: [{
+                    name: 'Basemap',
+                    borderColor: '#A0A0A0',
+                    nullColor: 'rgba(177, 244, 177, 0.5)',
+                    showInLegend: false
+                }, {
+                    type: 'mappoint',
+                    enableMouseTracking: true,
+                    colorKey: 'clusterPointsAmount',
+                    name: 'Cities',
+                    data: @Html(stations.toString)
+                }]
+            });
+            document.getElementById('button').addEventListener('click', () => {
+                var selectedPoints = chart.getSelectedPoints();
+                postMeteoTemporale(selectedPoints[0].name)
+            })
+    </script>
 
     <script>
             $( "#datepicker" ).datepicker({

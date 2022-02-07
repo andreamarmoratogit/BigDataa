@@ -36,7 +36,7 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     val colonnaT = dataframe.withColumn("Tmin", col(misura).cast("int")).agg(functions.min(misura) ).first().get(0)
     val colonna2T= dataframe.filter(dataframe(misura)===colonnaT).select("WBAN","Date",misura)
     val c=colonna2T.join(stations,colonna2T("WBAN")===stations("name"),"left").drop("WBAN")
-    c
+    c.withColumnRenamed(misura,"misura")
   }
 
   // periodo temporale di una determinata misura di una stazione
@@ -87,6 +87,10 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     q
   }
 
+  def getStations():DataFrame={
+    val d13=session.read.option("header", "true").option("inferSchema", "true").csv("Dataset\\stationsMerge.txt")
+    d13.select("name" ,"lat", "lon").distinct()
+  }
 
   def time_series(stazione:String,misura:String):DataFrame={
     session.read.option("header", "true").option("inferSchema", "true").

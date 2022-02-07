@@ -7,8 +7,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.inject.ApplicationLifecycle
 import play.api.mvc._
-import play.api.libs.json._
-import play.twirl.api.Html
+
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
@@ -60,7 +59,7 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
           )
         }*/
         //val ret=g.minM(mese,misura).reduce((a1,a2)=>a1+","+a2)
-        val ret =g.minM(mese,misura).select("name","lat","lon").toJSON.collectAsList().toString
+        val ret =g.minM(mese,misura).toJSON.collectAsList().toString
         //println(ret)
         //val ret = Minmax("94059",48.4887,-105.2096)
         //val json=Json.toJson(ret)
@@ -69,6 +68,14 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
       })
   }
 
+  def getMeteoTemporale(): Action[AnyContent] =Action{ implicit Request =>
+    val s=g.getStations().toJSON.collectAsList().toString
+    Ok(views.html.meteo_tempo(minMaxAttr)(s))
+  }
+  def postMeteoTemporale(station:String): Action[AnyContent] =Action{ implicit Request =>
+    val s=g.getStations().toJSON.collectAsList().toString
+    Ok(views.html.meteo_tempo(minMaxAttr)(s))
+  }
 
   def p3(): Action[AnyContent] = Action { implicit Request =>
     minMaxAttr.bindFromRequest().fold(

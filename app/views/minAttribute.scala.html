@@ -76,21 +76,27 @@
 
             tooltip: {
                 headerFormat: '',
-                pointFormat: '<b>{point.name}</b><br>Lat: {point.lat}, Lon: {point.lon}'
+                pointFormat: '<b>{point.name}</b><br>Data: {point.Date}, Misura: {point.misura}'
             },
-
+            plotOptions: {
+                series: {
+                    allowPointSelect: true,
+                    turboThreshold: 0
+                }
+            },
             series: [{
-                // Use the gb-all map with no data as a basemap
                 name: 'Basemap',
-                borderColor: '#A0A0A0',
-                nullColor: 'rgba(200, 200, 200, 0.3)',
+                borderColor: '#001f6d',//colore confini
+                nullColor: 'rgba(169,0,0,0.3)',//colore mappa
                 showInLegend: false
+
             }, {
                 name: 'Separators',
                 type: 'mapline',
-                nullColor: '#707070',
+                nullColor: '#2b2b2b', //colore marker
                 showInLegend: false,
                 enableMouseTracking: false
+
             }, {
                 // Specify points using lat/lon
                 type: 'mappoint',

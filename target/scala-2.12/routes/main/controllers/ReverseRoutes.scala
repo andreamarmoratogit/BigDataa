@@ -16,12 +16,6 @@ package controllers {
     }
 
   
-    // @LINE:6
-    def home(): Call = {
-      
-      Call("GET", _prefix)
-    }
-  
     // @LINE:7
     def postMinAttribute(): Call = {
       
@@ -34,16 +28,34 @@ package controllers {
       Call("GET", _prefix + { _defaultPrefix } + "minAttribute")
     }
   
+    // @LINE:9
+    def getMeteoTemporale(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "meteoTempo")
+    }
+  
+    // @LINE:6
+    def home(): Call = {
+      
+      Call("GET", _prefix)
+    }
+  
+    // @LINE:10
+    def postMeteoTemporale(String:String): Call = {
+      
+      Call("POST", _prefix + { _defaultPrefix } + "meteoTempo" + play.core.routing.queryString(List(Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("String", String)))))
+    }
+  
   }
 
-  // @LINE:15
+  // @LINE:14
   class ReverseAssets(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:15
+    // @LINE:14
     def versioned(file:Asset): Call = {
       implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
       Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))

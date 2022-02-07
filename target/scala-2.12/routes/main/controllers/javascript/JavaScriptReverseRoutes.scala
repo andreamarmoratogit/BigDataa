@@ -17,16 +17,6 @@ package controllers.javascript {
     }
 
   
-    // @LINE:6
-    def home: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.Prova.home",
-      """
-        function() {
-          return _wA({method:"GET", url:"""" + _prefix + """"})
-        }
-      """
-    )
-  
     // @LINE:7
     def postMinAttribute: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Prova.postMinAttribute",
@@ -47,9 +37,39 @@ package controllers.javascript {
       """
     )
   
+    // @LINE:9
+    def getMeteoTemporale: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.getMeteoTemporale",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "meteoTempo"})
+        }
+      """
+    )
+  
+    // @LINE:6
+    def home: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.home",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + """"})
+        }
+      """
+    )
+  
+    // @LINE:10
+    def postMeteoTemporale: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.postMeteoTemporale",
+      """
+        function(String0) {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "meteoTempo" + _qS([(""" + implicitly[play.api.mvc.QueryStringBindable[String]].javascriptUnbind + """)("String", String0)])})
+        }
+      """
+    )
+  
   }
 
-  // @LINE:15
+  // @LINE:14
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -57,7 +77,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:15
+    // @LINE:14
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

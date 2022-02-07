@@ -7,7 +7,7 @@ GET     /                               controllers.Prova.home()
 POST    /minAttribute                   controllers.Prova.postMinAttribute()
 GET     /minAttribute                   controllers.Prova.getMinAttribute()
 GET     /meteoTempo                     controllers.Prova.getMeteoTemporale()
-POST    /meteoTempo                     controllers.Prova.postMeteoTemporale(String)
+POST    /meteoTempo                     controllers.Prova.postMeteoTemporale()
 
 
 # Map static resources from the /public folder to the /assets URL path

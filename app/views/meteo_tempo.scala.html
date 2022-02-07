@@ -1,49 +1,26 @@
-@(query:Form[Query])(stations:String)(implicit messages: MessagesRequestHeader)
+@(query:Form[Query])(stations:String)(res:String)(implicit messages: MessagesRequestHeader)
 <!doctype html>
 @main{
 
     <div class="position-absolute top-0 start-1">
-
-        <h4 class="demoHeaders">Data Iniziale</h4>
-        <input type="text" id="datepicker">
-        <br>
-        <h4 class="demoHeaders">Data Finale</h4>
-        <input type="text" id="datepicker2">
-        <br>
-        <input type="submit" id="button">
-
+        <form method="post" action="@routes.Prova.postMeteoTemporale()">
+            @helper.CSRF.formField
+            <h4 class="demoHeaders">Data Iniziale</h4>
+            <input type="text" name="dataIn" id="datepicker">
+            <br>
+            <h4 class="demoHeaders">Data Finale</h4>
+            <input type="text" name="dataFin" id="datepicker2">
+            <br>
+            <input class="form-control" id="stazione" type="text" name="stazione" value="" aria-label="readonly input example" readonly>
+            <br>
+            <input type="submit" id="button">
+        </form>
     </div>
-
-    <script type="text/javascript">
-            google.charts.load("current", {packages:["corechart"]});
-            google.charts.setOnLoadCallback(drawChart);
-            function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                    ['Task', 'Hours per Day'],
-                    ['Work',     11],
-                    ['Eat',      2],
-                    ['Commute',  2],
-                    ['Watch TV', 2],
-                    ['Sleep',    7]
-            ]);
-
-                var options = {
-                    title: 'My Daily Activities',
-                    is3D: true,
-                };
-
-                var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-                chart.draw(data, options);
-            }
-    </script>
 
 
     <div class="container" id="container"></div>
 
-    <div class="container">
-        <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
-    </div>
-
+    <div class="container" id="pie"></div>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
@@ -54,104 +31,146 @@
     <script src="https://code.highcharts.com/modules/marker-clusters.js"></script>
     <script src="https://code.highcharts.com/modules/coloraxis.js"></script>
     <script>
-            const chart=Highcharts.mapChart('container', {
-                chart: {
-                    map: 'custom/north-america-no-central'
-                },
-                title: {
-                    text: 'European Train Stations Near Airports'
-                },
-                subtitle: {
-                    text: ''
-                },
-                mapNavigation: {
-                    enabled: true
-                },
-                tooltip: {
-                    headerFormat: '',
-                    pointFormat: '<b>{point.name}</b><br>Lat: {point.lat:.2f}, Lon: {point.lon:.2f}'
-                },
-                colorAxis: {
-                    min: 0,
-                    max: 20
-                },
-                plotOptions: {
-                    mappoint: {
-                        cluster: {
-                            enabled: true,
-                            allowOverlap: false,
-                            animation: {
-                                duration: 450
-                            },
-                            layoutAlgorithm: {
-                                type: 'grid',
-                                gridSize: 70
-                            },
-                            zones: [{
-                                from: 1,
-                                to: 19,
-                                marker: {
-                                    radius: 15
-                                }
-                            }, {
-                                from: 20,
-                                to: 49,
-                                marker: {
-                                    radius: 18
-                                }
-                            }, {
-                                from: 50,
-                                to: 99,
-                                marker: {
-                                    radius: 20
-                                }
-                            }, {
-                                from: 100,
-                                to: 149,
-                                marker: {
-                                    radius: 22
-                                }
-                            }, {
-                                from: 150,
-                                to: 200,
-                                marker: {
-                                    radius: 25
-                                }
-                            }]
-                        }
-                    },
-                    series:{
-                        allowPointSelect: true,
-                        turboThreshold: 0
+        const chart=Highcharts.mapChart('container', {
+            chart: {
+                map: 'custom/north-america-no-central'
+            },
+            title: {
+                text: 'European Train Stations Near Airports'
+            },
+            subtitle: {
+                text: ''
+            },
+            mapNavigation: {
+                enabled: true
+            },
+            tooltip: {
+                headerFormat: '',
+                pointFormat: '<b>{point.name}</b><br>Lat: {point.lat:.2f}, Lon: {point.lon:.2f}'
+            },
+            colorAxis: {
+                min: 0,
+                max: 20
+            },
+            plotOptions: {
+                mappoint: {
+                    cluster: {
+                        enabled: true,
+                        allowOverlap: false,
+                        animation: {
+                            duration: 450
+                        },
+                        layoutAlgorithm: {
+                            type: 'grid',
+                            gridSize: 70
+                        },
+                        zones: [{
+                            from: 1,
+                            to: 19,
+                            marker: {
+                                radius: 15
+                            }
+                        }, {
+                            from: 20,
+                            to: 49,
+                            marker: {
+                                radius: 18
+                            }
+                        }, {
+                            from: 50,
+                            to: 99,
+                            marker: {
+                                radius: 20
+                            }
+                        }, {
+                            from: 100,
+                            to: 149,
+                            marker: {
+                                radius: 22
+                            }
+                        }, {
+                            from: 150,
+                            to: 200,
+                            marker: {
+                                radius: 25
+                            }
+                        }]
                     }
                 },
-                series: [{
-                    name: 'Basemap',
-                    borderColor: '#A0A0A0',
-                    nullColor: 'rgba(177, 244, 177, 0.5)',
-                    showInLegend: false
-                }, {
-                    type: 'mappoint',
-                    enableMouseTracking: true,
-                    colorKey: 'clusterPointsAmount',
-                    name: 'Cities',
-                    data: @Html(stations.toString)
-                }]
-            });
-            document.getElementById('button').addEventListener('click', () => {
-                var selectedPoints = chart.getSelectedPoints();
-                postMeteoTemporale(selectedPoints[0].name)
-            })
+                series:{
+                    allowPointSelect: true,
+                    turboThreshold: 0,
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function () {
+                                $('#stazione').val(this.name)
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Basemap',
+                borderColor: '#A0A0A0',
+                nullColor: 'rgba(177, 244, 177, 0.5)',
+                showInLegend: false
+            }, {
+                type: 'mappoint',
+                enableMouseTracking: true,
+                colorKey: 'clusterPointsAmount',
+                name: 'Cities',
+                data: @Html(stations.toString)
+            }]
+        });
+
+        Highcharts.chart('pie', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Browser market shares in January, 2018'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    }
+                }
+            },
+            series: [{
+                name: 'Brands',
+                colorByPoint: true,
+                data: @Html(res.toString)
+            }]
+        });
+
     </script>
 
     <script>
             $( "#datepicker" ).datepicker({
                 changeMonth: true,
-                changeYear: true
+                changeYear: true,
+                dateFormat:'yy/mm/dd'
             });
             $( "#datepicker2" ).datepicker({
                 changeMonth: true,
-                changeYear: true
+                changeYear: true,
+                dateFormat:'yy/mm/dd'
             });
     </script>
 }

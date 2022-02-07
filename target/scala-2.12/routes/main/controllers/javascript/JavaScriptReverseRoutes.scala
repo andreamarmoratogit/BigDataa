@@ -37,6 +37,16 @@ package controllers.javascript {
       """
     )
   
+    // @LINE:10
+    def postMeteoTemporale: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Prova.postMeteoTemporale",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "meteoTempo"})
+        }
+      """
+    )
+  
     // @LINE:9
     def getMeteoTemporale: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Prova.getMeteoTemporale",
@@ -53,16 +63,6 @@ package controllers.javascript {
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + """"})
-        }
-      """
-    )
-  
-    // @LINE:10
-    def postMeteoTemporale: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.Prova.postMeteoTemporale",
-      """
-        function(String0) {
-          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "meteoTempo" + _qS([(""" + implicitly[play.api.mvc.QueryStringBindable[String]].javascriptUnbind + """)("String", String0)])})
         }
       """
     )

@@ -43,7 +43,7 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
   // ES: in 3 giorni ---> 70% vento, 10% pioggia, 20% nuvole
   // DAILY :codesum, snowfall, precipTotal,
   // FZRA,SN,TS,RA
-  def percentuale(stazione:String, inizio:DataF, fine:DataF) : Dataset[(String,Double)] = {
+  def percentuale(stazione:String, inizio:DataF, fine:DataF) : DataFrame = {
     var daily =session.read.option("header", "true").option("inferSchema", "true")
       .csv("Dataset\\QCLCD" + inizio.year+inizio.month + "\\" + inizio.year+inizio.month+ "daily.txt")
       .select("WBAN", "Date", "CodeSum", "PrecipTotal", "SnowFall")
@@ -83,7 +83,8 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     daily5.show()
     daily5.cache
     val giorniTot=daily5.agg(sum("sum(_2)")).first().get(0).toString.toDouble
-    val q=daily5.map(row=>{(row(0).toString,(row(1).toString.toInt*100)/giorniTot)})
+    val q=daily5.map(row=>{(row(0).toString,(row(1).toString.toInt*100)/giorniTot)}).withColumnRenamed("_1","name").withColumnRenamed("_2","y")
+     // .withColumn("id",lit(0)).groupBy("id").pivot("_1").sum("_2").drop("id")
     q
   }
 
@@ -113,6 +114,7 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     session.read.option("header", "true").csv("Dataset\\QCLCD" + "201301" + "\\" + "201301" + "monthly.txt").select("WBAN","AvgTemp")
       .filter(col("AvgTemp")=!="M").withColumn("AvgTemp", col("AvgTemp").cast(DoubleType) alias("AvgTemp"))
   }
+
   def prova():Unit={
     val d=session.read.option("header", "true").option("delimiter",";").option("inferSchema", "true").csv("Dataset\\MonthlyMerge2.csv")
 

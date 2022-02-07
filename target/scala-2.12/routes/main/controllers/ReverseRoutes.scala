@@ -28,6 +28,12 @@ package controllers {
       Call("GET", _prefix + { _defaultPrefix } + "minAttribute")
     }
   
+    // @LINE:10
+    def postMeteoTemporale(): Call = {
+      
+      Call("POST", _prefix + { _defaultPrefix } + "meteoTempo")
+    }
+  
     // @LINE:9
     def getMeteoTemporale(): Call = {
       
@@ -38,12 +44,6 @@ package controllers {
     def home(): Call = {
       
       Call("GET", _prefix)
-    }
-  
-    // @LINE:10
-    def postMeteoTemporale(String:String): Call = {
-      
-      Call("POST", _prefix + { _defaultPrefix } + "meteoTempo" + play.core.routing.queryString(List(Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("String", String)))))
     }
   
   }

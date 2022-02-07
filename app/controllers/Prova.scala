@@ -1,20 +1,22 @@
 package controllers
 
-import Spark.{Gestore, Minmax}
+import Spark.{DataF, Gestore, Minmax}
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.{lit, monotonically_increasing_id}
 import org.apache.spark.{SparkConf, SparkContext}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.inject.ApplicationLifecycle
+import play.api.mvc.Results.Ok
 import play.api.mvc._
 
-
+import java.util.StringTokenizer
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 
 case class Query (mese: String,misura: String){}
-
+case class MTQ(dataIn:String,dataFin:String,stazione:String){}
 @Singleton
 class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifecycle)  extends MessagesAbstractController(cc){
   val conf=new SparkConf().setMaster("local[*]").setAppName("Meteo").set("spark.driver.memory","6g")
@@ -29,6 +31,12 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
     "mese" -> text,
     "misura" -> text,
   )(Query.apply)(Query.unapply))
+
+  val mtForm: Form[MTQ]= Form(mapping(
+    "dataIn" -> text,
+    "dataFin" -> text,
+    "stazione" -> text
+  )(MTQ.apply)(MTQ.unapply))
 
 
 
@@ -70,11 +78,21 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
 
   def getMeteoTemporale(): Action[AnyContent] =Action{ implicit Request =>
     val s=g.getStations().toJSON.collectAsList().toString
-    Ok(views.html.meteo_tempo(minMaxAttr)(s))
+    Ok(views.html.meteo_tempo(minMaxAttr)(s)("[]"))
   }
-  def postMeteoTemporale(station:String): Action[AnyContent] =Action{ implicit Request =>
+  def postMeteoTemporale(): Action[AnyContent] =Action{ implicit Request =>
     val s=g.getStations().toJSON.collectAsList().toString
-    Ok(views.html.meteo_tempo(minMaxAttr)(s))
+    mtForm.bindFromRequest().fold(
+      error => BadRequest(""),
+      q => {
+        val st=q.dataIn.split("/")
+        val st2=q.dataFin.split("/")
+
+        val d=g.percentuale(q.stazione,new DataF(st(0),st(1),st(2)),new DataF(st2(0),st2(1),st2(2)))
+        d.show()
+
+        Ok(views.html.meteo_tempo(minMaxAttr)(s)(d.toJSON.collectAsList().toString))}
+    )
   }
 
   def p3(): Action[AnyContent] = Action { implicit Request =>

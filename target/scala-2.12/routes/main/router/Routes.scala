@@ -42,7 +42,7 @@ class Routes(
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """minAttribute""", """controllers.Prova.postMinAttribute()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """minAttribute""", """controllers.Prova.getMinAttribute()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """meteoTempo""", """controllers.Prova.getMeteoTemporale()"""),
-    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """meteoTempo""", """controllers.Prova.postMeteoTemporale(String:String)"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """meteoTempo""", """controllers.Prova.postMeteoTemporale()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
@@ -128,12 +128,12 @@ class Routes(
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("meteoTempo")))
   )
   private[this] lazy val controllers_Prova_postMeteoTemporale4_invoker = createInvoker(
-    Prova_0.postMeteoTemporale(fakeValue[String]),
+    Prova_0.postMeteoTemporale(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.Prova",
       "postMeteoTemporale",
-      Seq(classOf[String]),
+      Nil,
       "POST",
       this.prefix + """meteoTempo""",
       """""",
@@ -188,8 +188,8 @@ class Routes(
   
     // @LINE:10
     case controllers_Prova_postMeteoTemporale4_route(params@_) =>
-      call(params.fromQuery[String]("String", None)) { (String) =>
-        controllers_Prova_postMeteoTemporale4_invoker.call(Prova_0.postMeteoTemporale(String))
+      call { 
+        controllers_Prova_postMeteoTemporale4_invoker.call(Prova_0.postMeteoTemporale())
       }
   
     // @LINE:14

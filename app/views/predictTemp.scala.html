@@ -1,0 +1,220 @@
+@(form:Form[MTQ])(stations:String)(data:Array[(Double,Double,Double,Double,Int,Int,Int)])(implicit messages: MessagesRequestHeader)
+<!doctype html>
+@main{
+    <div class="position-absolute top-0 start-1">
+        <form method="post" action="@routes.Prova.postPredictTemp()">
+            @helper.CSRF.formField
+            <h4 class="demoHeaders">Data Iniziale</h4>
+            <input type="text" name="dataIn" id="datepicker">
+            <br>
+            <h4 class="demoHeaders">Data Finale</h4>
+            <input type="text" name="dataFin" id="datepicker2">
+            <br><br>
+            <input class="form-control" id="stazione" type="text" name="stazione" value="" aria-label="readonly input example" readonly>
+            <br>
+            <input type="submit" id="button">
+        </form>
+    </div>
+    <div class="container" id="container"></div>
+    <div class="container">
+        <figure class="highcharts-figure">
+            <div id="container2"></div>
+        </figure>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/mapdata/custom/north-america-no-central.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/marker-clusters.js"></script>
+    <script src="https://code.highcharts.com/modules/coloraxis.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+
+
+    <script>
+        const chart=Highcharts.mapChart('container', {
+            chart: {
+                map: 'custom/north-america-no-central'
+            },
+            mapNavigation: {
+                enabled: true
+            },
+            tooltip: {
+                headerFormat: '',
+                pointFormat: '<b>{point.name}</b><br>Lat: {point.lat:.2f}, Lon: {point.lon:.2f}'
+            },
+            colorAxis: {
+                min: 1,
+                max: 100
+            },
+            plotOptions: {
+                mappoint: {
+                    cluster: {
+                        enabled: true,
+                        allowOverlap: false,
+                        animation: {
+                            duration: 450
+                        },
+                        layoutAlgorithm: {
+                            type: 'grid',
+                            gridSize: 70
+                        },
+                        zones: [{
+                            from: 1,
+                            to: 19,
+                            marker: {
+                                radius: 15
+                            }
+                        }, {
+                            from: 20,
+                            to: 49,
+                            marker: {
+                                radius: 18
+                            }
+                        }, {
+                            from: 50,
+                            to: 99,
+                            marker: {
+                                radius: 20
+                            }
+                        }, {
+                            from: 100,
+                            to: 149,
+                            marker: {
+                                radius: 22
+                            }
+                        }, {
+                            from: 150,
+                            to: 200,
+                            marker: {
+                                radius: 25
+                            }
+                        }]
+                    }
+                },
+                series:{
+                    allowPointSelect: true,
+                    turboThreshold: 0,
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function () {
+                                $('#stazione').val(this.name)
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Basemap',
+                borderColor: '#A0A0A0',
+                nullColor: 'rgba(177, 244, 177, 0.5)',
+                showInLegend: false
+            }, {
+                type: 'mappoint',
+                enableMouseTracking: true,
+                colorKey: 'clusterPointsAmount',
+                name: 'Cities',
+                data: @Html(stations.toString)
+            }]
+        });
+
+    </script>
+
+    <script>
+        // A point click event that uses the Renderer to draw a label next to the point
+        // On subsequent clicks, move the existing label instead of creating a new one.
+
+
+        var d= [];
+        var giorni=[];
+        var Tmax=[];
+        var Tmin=[];
+        var TmaxP=[];
+        var TminP=[];
+
+        @for(x<-data){
+            d.push([@x._1,@x._2,@x._3,@x._4,@x._5,@x._6,@x._7])
+        }
+
+        for(let i=0;i<=d.length-1;i++){
+            Tmax.push(d[i][0]);
+            TmaxP.push(d[i][1]);
+            Tmin.push(d[i][2]);
+            TminP.push(d[i][3]);
+            giorni.push(Date.UTC(d[i][4],d[i][5]-1,d[i][6],0,0,0,0))
+        }
+        giorni.forEach(function(point) {
+            point[0] = Date.parse(point[0])
+        });
+
+
+
+        const chart2=Highcharts.chart('container2', {
+            chart: {
+                scrollablePlotArea: {
+                    minWidth: 700
+                }
+            },
+            xAxis: {
+                type:"datetime",
+                categories:giorni,
+                labels: {
+                    enabled: true,
+                    format: "{value:%d-%b-%Y}",
+                },
+            },
+            legend: {
+                align: 'left',
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+
+            tooltip: {
+                shared: true,
+                crosshairs: true
+            },
+
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    className: 'popup-on-click',
+                    marker: {
+                        lineWidth: 1
+                    }
+                }
+            },
+            series: [{
+                name: 'TempMax',
+                data:Tmax
+            }, {
+                name: 'TempMax predetta',
+                data:TmaxP
+
+            }, {
+                name: 'TempMin',
+                data:Tmin
+            }, {
+                name: 'TempMin predetta',
+                data:TminP
+            }]
+        });
+
+    </script>
+
+    <script>
+            $( "#datepicker" ).datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat:'yy/mm/dd'
+            });
+            $( "#datepicker2" ).datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat:'yy/mm/dd'
+            });
+    </script>
+}

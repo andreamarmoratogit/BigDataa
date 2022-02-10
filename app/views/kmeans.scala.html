@@ -1,0 +1,82 @@
+@(dati:String)
+<!doctype html>
+@main{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+    <script src="https://code.highcharts.com/mapdata/custom/north-america-no-central.js"></script>
+    <p>Questo tool permette di visualizzare le stazioni metereologiche piú simili tra di loro sulla base
+        delle temperature (max,min,avg) e delle precipitazioni medie registrate in tutto l'anno </p>
+    <div id="container"></div>
+
+    <script>
+            const colors= ['rgb(255,0,0)', 'rgb(0,48,227)', 'rgb(196,0,245)',
+                        'rgb(0,255,222)', 'rgb(19,255,0)', 'rgb(255,234,0)', 'rgb(154,105,105)'];
+            Highcharts.mapChart('container', {
+
+                chart: {
+                    map:'custom/north-america-no-central',
+                    renderTo: 'container',
+                    events: {
+                        load() {
+                            const points = this.series[2].data
+                            points.forEach((point) => {
+                                const color =colors[point.cluster]
+                                point.update({ color:color }, false)
+                            })
+                            this.redraw()
+                        }
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                mapNavigation: {
+                    enabled: true
+                },
+                plotOptions:{
+                    series:{
+                        turboThreshold: 0,
+                        dataLabels:[{
+                            format: ''
+                        }],
+                        marker:{
+                            enabled:true
+                        }
+                    }
+                },
+                tooltip: {
+                    pointFormat: 'Codice:{point.name}, Lat: {point.lat}, Lon: {point.lon}'
+                },
+
+                series: [{
+                    name: 'Basemap',
+                    borderColor: '#A0A0A0',
+                    nullColor: 'rgba(200, 200, 200, 0.3)',
+                    showInLegend: false
+                }, {
+                    name: 'Separators',
+                    type: 'mapline',
+                    color: '#707070',
+                    showInLegend: false,
+                    enableMouseTracking: false
+                }, {
+                    // Specify points using lat/lon
+                    type: 'mappoint',
+                    name: 'Stazioni',
+
+                    data:@Html(dati)
+                }]
+            });
+
+
+
+    </script>
+
+
+
+
+
+}

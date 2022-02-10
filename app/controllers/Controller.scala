@@ -1,22 +1,19 @@
 package controllers
 
-import Spark.{DataF, Gestore, Minmax}
+import Spark.{DataF, Gestore}
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.{lit, monotonically_increasing_id}
 import org.apache.spark.{SparkConf, SparkContext}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.inject.ApplicationLifecycle
-import play.api.mvc.Results.Ok
 import play.api.mvc._
-
-import java.util.StringTokenizer
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 case class MA(stazione:String,misura:String){}
 case class Query (mese: String,misura: String){}
 case class MTQ(dataIn:String,dataFin:String,stazione:String){}
+case class TIME(stazione:String,misura:String){}
 @Singleton
 class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifecycle)  extends MessagesAbstractController(cc){
   val conf=new SparkConf().setMaster("local[*]").setAppName("Meteo").set("spark.driver.memory","6g")
@@ -43,6 +40,16 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
     "misura" -> text
   )(MA.apply)(MA.unapply))
 
+  val ptForm:Form[MTQ]=Form(mapping(
+    "dataIn" -> text,
+    "dataFin" -> text,
+    "stazione" -> text
+  )(MTQ.apply)(MTQ.unapply))
+
+  val tseries:Form[TIME]=Form(mapping(
+    "stazione" -> text,
+    "misura" ->text
+  )(TIME.apply)(TIME.unapply))
 
   def home(): Action[AnyContent] = Action { implicit Request =>
     Ok(views.html.home())
@@ -116,7 +123,58 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
         Ok(views.html.mediaAnnuale(maForm)(s)(Array(d.head()._3,d.head()._1,d.head()._2)))}
     )
   }
+  def getTime():Action[AnyContent] = Action { implicit Request =>
+    val s=g.getStationsM().toJSON.collectAsList().toString
+    Ok(views.html.time(tseries)(s)(("[]")))
+  }
 
+  def postTime():Action[AnyContent] = Action { implicit Request =>
+    val s=g.getStationsM().toJSON.collectAsList().toString
+    tseries.bindFromRequest().fold(
+      error => BadRequest(""),
+      q =>{
+        var misura=""
+        q.misura match {
+          case "Temperatura Max" => misura="Tmax"
+          case "Temperatura Min" => misura="Tmin"
+          case "Neve" => misura="SnowFall"
+          case "Pioggia" => misura="PrecipTotal"
+          case "Vento" => misura="AvgSpeed"
+        }
+        val serie =g.time_series(q.stazione,misura) // stazione,data,misura
+        Ok(views.html.time(tseries)(s)(serie.toJSON.collectAsList().toString))
+
+      })
+  }
+
+  def getTemp():Action[AnyContent] = Action { implicit Request =>
+    import ss.implicits._
+    val s=g.getTempForMap().as[(String,Double)]
+    Ok(views.html.temp()(s.collect()))
+  }
+
+  def getKMeans(): Action[AnyContent] = Action { implicit Request =>
+    val d=g.kMeans()
+    Ok(views.html.kmeans(d))
+  }
+
+  def getPredictTemp(): Action[AnyContent] = Action { implicit Request =>
+    val s=g.getStationsM().toJSON.collectAsList().toString
+    Ok(views.html.predictTemp(ptForm)(s)(Array((0,0,0,0,0,0,0))))
+  }
+  def postPredictTemp(): Action[AnyContent] = Action { implicit Request =>
+    import ss.implicits._
+
+    val s=g.getStationsM().toJSON.collectAsList().toString
+    ptForm.bindFromRequest().fold(
+      error => BadRequest(""),
+      q => {
+        val st = q.dataIn.split("/")
+        val st2 = q.dataFin.split("/")
+        val d=g.predictor(q.stazione,new DataF(st(0), st(1), st(2)), new DataF(st2(0), st2(1), st2(2)))
+        Ok(views.html.predictTemp(ptForm)(s)(d.as[(Double,Double,Double,Double,Int,Int,Int)].collect()))
+      })
+  }
 
 
 }

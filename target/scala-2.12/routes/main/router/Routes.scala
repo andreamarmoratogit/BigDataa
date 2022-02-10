@@ -14,7 +14,7 @@ class Routes(
   override val errorHandler: play.api.http.HttpErrorHandler, 
   // @LINE:6
   Prova_0: controllers.Prova,
-  // @LINE:17
+  // @LINE:21
   Assets_1: controllers.Assets,
   val prefix: String
 ) extends GeneratedRouter {
@@ -23,7 +23,7 @@ class Routes(
    def this(errorHandler: play.api.http.HttpErrorHandler,
     // @LINE:6
     Prova_0: controllers.Prova,
-    // @LINE:17
+    // @LINE:21
     Assets_1: controllers.Assets
   ) = this(errorHandler, Prova_0, Assets_1, "/")
 
@@ -45,6 +45,12 @@ class Routes(
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """meteoTempo""", """controllers.Prova.postMeteoTemporale()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """mediaAnnuale""", """controllers.Prova.getMediaAnnuale()"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """mediaAnnuale""", """controllers.Prova.postMediaAnnuale()"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """kMeans""", """controllers.Prova.getKMeans()"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """predictTemp""", """controllers.Prova.getPredictTemp()"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """predictTemp""", """controllers.Prova.postPredictTemp()"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """time""", """controllers.Prova.getTime()"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """time""", """controllers.Prova.postTime()"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """temp""", """controllers.Prova.getTemp()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
@@ -179,11 +185,119 @@ class Routes(
     )
   )
 
+  // @LINE:13
+  private[this] lazy val controllers_Prova_getKMeans7_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("kMeans")))
+  )
+  private[this] lazy val controllers_Prova_getKMeans7_invoker = createInvoker(
+    Prova_0.getKMeans(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "getKMeans",
+      Nil,
+      "GET",
+      this.prefix + """kMeans""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:14
+  private[this] lazy val controllers_Prova_getPredictTemp8_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("predictTemp")))
+  )
+  private[this] lazy val controllers_Prova_getPredictTemp8_invoker = createInvoker(
+    Prova_0.getPredictTemp(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "getPredictTemp",
+      Nil,
+      "GET",
+      this.prefix + """predictTemp""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:15
+  private[this] lazy val controllers_Prova_postPredictTemp9_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("predictTemp")))
+  )
+  private[this] lazy val controllers_Prova_postPredictTemp9_invoker = createInvoker(
+    Prova_0.postPredictTemp(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "postPredictTemp",
+      Nil,
+      "POST",
+      this.prefix + """predictTemp""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:16
+  private[this] lazy val controllers_Prova_getTime10_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("time")))
+  )
+  private[this] lazy val controllers_Prova_getTime10_invoker = createInvoker(
+    Prova_0.getTime(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "getTime",
+      Nil,
+      "GET",
+      this.prefix + """time""",
+      """""",
+      Seq()
+    )
+  )
+
   // @LINE:17
-  private[this] lazy val controllers_Assets_versioned7_route = Route("GET",
+  private[this] lazy val controllers_Prova_postTime11_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("time")))
+  )
+  private[this] lazy val controllers_Prova_postTime11_invoker = createInvoker(
+    Prova_0.postTime(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "postTime",
+      Nil,
+      "POST",
+      this.prefix + """time""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:18
+  private[this] lazy val controllers_Prova_getTemp12_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("temp")))
+  )
+  private[this] lazy val controllers_Prova_getTemp12_invoker = createInvoker(
+    Prova_0.getTemp(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Prova",
+      "getTemp",
+      Nil,
+      "GET",
+      this.prefix + """temp""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:21
+  private[this] lazy val controllers_Assets_versioned13_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("assets/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_versioned7_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_versioned13_invoker = createInvoker(
     Assets_1.versioned(fakeValue[String], fakeValue[Asset]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -242,10 +356,46 @@ class Routes(
         controllers_Prova_postMediaAnnuale6_invoker.call(Prova_0.postMediaAnnuale())
       }
   
+    // @LINE:13
+    case controllers_Prova_getKMeans7_route(params@_) =>
+      call { 
+        controllers_Prova_getKMeans7_invoker.call(Prova_0.getKMeans())
+      }
+  
+    // @LINE:14
+    case controllers_Prova_getPredictTemp8_route(params@_) =>
+      call { 
+        controllers_Prova_getPredictTemp8_invoker.call(Prova_0.getPredictTemp())
+      }
+  
+    // @LINE:15
+    case controllers_Prova_postPredictTemp9_route(params@_) =>
+      call { 
+        controllers_Prova_postPredictTemp9_invoker.call(Prova_0.postPredictTemp())
+      }
+  
+    // @LINE:16
+    case controllers_Prova_getTime10_route(params@_) =>
+      call { 
+        controllers_Prova_getTime10_invoker.call(Prova_0.getTime())
+      }
+  
     // @LINE:17
-    case controllers_Assets_versioned7_route(params@_) =>
+    case controllers_Prova_postTime11_route(params@_) =>
+      call { 
+        controllers_Prova_postTime11_invoker.call(Prova_0.postTime())
+      }
+  
+    // @LINE:18
+    case controllers_Prova_getTemp12_route(params@_) =>
+      call { 
+        controllers_Prova_getTemp12_invoker.call(Prova_0.getTemp())
+      }
+  
+    // @LINE:21
+    case controllers_Assets_versioned13_route(params@_) =>
       call(Param[String]("path", Right("/public")), params.fromPath[Asset]("file", None)) { (path, file) =>
-        controllers_Assets_versioned7_invoker.call(Assets_1.versioned(path, file))
+        controllers_Assets_versioned13_invoker.call(Assets_1.versioned(path, file))
       }
   }
 }

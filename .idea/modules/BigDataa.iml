@@ -343,5 +343,13 @@
     <orderEntry type="library" name="jquery-3.3.1.slim" level="application" />
     <orderEntry type="library" name="popper.js" level="application" />
     <orderEntry type="library" name="ol" level="application" />
+    <orderEntry type="library" name="proj4js" level="application" />
+    <orderEntry type="library" name="highmaps" level="application" />
+    <orderEntry type="library" name="exporting" level="application" />
+    <orderEntry type="library" name="offline-exporting" level="application" />
+    <orderEntry type="library" name="north-america-no-central" level="application" />
+    <orderEntry type="library" name="data" level="application" />
+    <orderEntry type="library" name="coloraxis" level="application" />
+    <orderEntry type="library" name="marker-clusters" level="application" />
   </component>
 </module>

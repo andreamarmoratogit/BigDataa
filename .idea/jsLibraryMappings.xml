@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$" libraries="{jquery-3.3.1.slim, ol, popper.js}" />
+    <file url="file://$PROJECT_DIR$" libraries="{coloraxis, data, exporting, highmaps, jquery-3.3.1.slim, marker-clusters, north-america-no-central, offline-exporting, ol, popper.js, proj4js}" />
   </component>
 </project>

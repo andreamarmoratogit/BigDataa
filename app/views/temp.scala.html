@@ -1,0 +1,140 @@
+@()(media:Array[(String,Double)])(implicit messages: MessagesRequestHeader)
+<!doctype html>
+    @main{
+        <!--[{
+    name: 'London',
+    lat: 35.695,
+    lon: -101.395,
+
+    "name": 'London',
+    "lat": "35.695",
+    "lon": "-101.395",
+    }]-->
+
+
+
+
+
+<div class="position-absolute top-0 start-1">
+    <form method="get" action="@routes.Prova.getTemp()">
+    @helper.CSRF.formField
+    </form>
+</div>
+<div class="container ">
+    <div id="container"></div>
+
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/custom/us-all-mainland.js"></script>
+
+<script>
+
+        var data = [
+            ['us-ma', 0],
+            ['us-wa', 1],
+            ['us-ca', 2],
+            ['us-or', 3],
+            ['us-wi', 4],
+            ['us-me', 5],
+            ['us-mi', 6],
+            ['us-nv', 7],
+            ['us-nm', 8],
+            ['us-co', 9],
+            ['us-wy', 10],
+            ['us-ks', 11],
+            ['us-ne', 12],
+            ['us-ok', 13],
+            ['us-mo', 14],
+            ['us-il', 15],
+            ['us-in', 16],
+            ['us-vt', 17],
+            ['us-ar', 18],
+            ['us-tx', 19],
+            ['us-ri', 20],
+            ['us-al', 21],
+            ['us-ms', 22],
+            ['us-nc', 23],
+            ['us-va', 24],
+            ['us-ia', 25],
+            ['us-md', 26],
+            ['us-de', 27],
+            ['us-pa', 28],
+            ['us-nj', 29],
+            ['us-ny', 30],
+            ['us-id', 31],
+            ['us-sd', 32],
+            ['us-ct', 33],
+            ['us-nh', 34],
+            ['us-ky', 35],
+            ['us-oh', 36],
+            ['us-tn', 37],
+            ['us-wv', 38],
+            ['us-dc', 39],
+            ['us-la', 40],
+            ['us-fl', 41],
+            ['us-ga', 42],
+            ['us-sc', 43],
+            ['us-mn', 44],
+            ['us-mt', 45],
+            ['us-nd', 46],
+            ['us-az', 47],
+            ['us-ut', 48]
+        ];
+        let stato="";
+        let data2=[]; // qui vorrei mettere stato associato con media
+        let data3=[];
+
+        @for(y<-media){
+        data2.push(["@y._1",@y._2]);
+        }
+        // Create the chart
+        Highcharts.mapChart('container', {
+            chart: {
+                map: 'countries/us/custom/us-all-mainland'
+            },
+
+            title: {
+                text: 'Highmaps basic demo'
+            },
+
+            subtitle: {
+                text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/us/custom/us-all-mainland.js">United States of America, mainland</a>'
+            },
+
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'bottom'
+                }
+            },
+
+            colorAxis: {
+                min: 20,
+                max:80,
+                color: "#E60B33FF"
+            },
+
+            series: [{
+                data: data2,
+                name: 'Random data',
+                states: {
+                    hover: {
+                        color: '#e60b66'
+                    }
+                },
+
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                }
+            }]
+        });
+
+</script>
+
+
+}

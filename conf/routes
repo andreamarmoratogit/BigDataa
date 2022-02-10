@@ -10,8 +10,12 @@ GET     /meteoTempo                     controllers.Prova.getMeteoTemporale()
 POST    /meteoTempo                     controllers.Prova.postMeteoTemporale()
 GET     /mediaAnnuale                   controllers.Prova.getMediaAnnuale()
 POST    /mediaAnnuale                   controllers.Prova.postMediaAnnuale()
-
-
+GET     /kMeans                         controllers.Prova.getKMeans()
+GET     /predictTemp                    controllers.Prova.getPredictTemp()
+POST    /predictTemp                    controllers.Prova.postPredictTemp()
+GET     /time                           controllers.Prova.getTime()
+POST    /time                           controllers.Prova.postTime()
+GET     /temp                           controllers.Prova.getTemp()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

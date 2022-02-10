@@ -59,8 +59,8 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
                             <a class="dropdown-item" href=""""),_display_(/*35.61*/routes/*35.67*/.Prova.getMinAttribute()),format.raw/*35.91*/("""">Min Attribute</a>
                             <a class="dropdown-item" href="#">Max Attribute</a>
                             <a class="dropdown-item" href=""""),_display_(/*37.61*/routes/*37.67*/.Prova.getMeteoTemporale()),format.raw/*37.93*/("""">Meteo temporale</a>
-                            <a class="dropdown-item" href="#">Time Series</a>
-                            <a class="dropdown-item" href="#">Cartina colorata</a>
+                            <a class="dropdown-item" href=""""),_display_(/*38.61*/routes/*38.67*/.Prova.getTime()),format.raw/*38.83*/("""">Time Series</a>
+                            <a class="dropdown-item" href=""""),_display_(/*39.61*/routes/*39.67*/.Prova.getTemp()),format.raw/*39.83*/("""">Cartina colorata</a>
                             <a class="dropdown-item" href=""""),_display_(/*40.61*/routes/*40.67*/.Prova.getMediaAnnuale()),format.raw/*40.91*/("""">Media Annuale</a>
                         </div>
                     </li>
@@ -69,19 +69,18 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
                             Machine Learning
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">?????</a>
-                            <a class="dropdown-item" href="#">?????</a>
-                            <a class="dropdown-item" href="#">?????</a>
+                            <a class="dropdown-item" href=""""),_display_(/*48.61*/routes/*48.67*/.Prova.getKMeans()),format.raw/*48.85*/("""">Clustering</a>
+                            <a class="dropdown-item" href=""""),_display_(/*49.61*/routes/*49.67*/.Prova.getPredictTemp()),format.raw/*49.90*/("""">Predittore Temp</a>
                         </div>
                     </li>
                 </ul>
             </div>
         </nav>
         <br>
-        """),_display_(/*57.10*/content),format.raw/*57.17*/("""
+        """),_display_(/*56.10*/content),format.raw/*56.17*/("""
 
 
-        """),format.raw/*60.9*/("""<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        """),format.raw/*59.9*/("""<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
@@ -105,9 +104,9 @@ Seq[Any](format.raw/*2.1*/("""<!doctype html>
               /*
                   -- GENERATED --
                   SOURCE: app/views/main.scala.html
-                  HASH: d0f8f03af3ac54ecd35e09ae60c5690903105260
-                  MATRIX: 726->1|834->16|1090->246|1104->252|1170->298|1238->339|1253->345|1315->386|1383->427|1398->433|1471->485|1539->526|1554->532|1632->588|1707->636|1722->642|1785->684|1869->741|1884->747|1950->792|2876->1691|2891->1697|2925->1710|3448->2206|3463->2212|3508->2236|3695->2396|3710->2402|3757->2428|4027->2671|4042->2677|4087->2701|4913->3500|4941->3507|4979->3518
-                  LINES: 21->1|26->2|33->9|33->9|33->9|34->10|34->10|34->10|35->11|35->11|35->11|36->12|36->12|36->12|37->13|37->13|37->13|38->14|38->14|38->14|52->28|52->28|52->28|59->35|59->35|59->35|61->37|61->37|61->37|64->40|64->40|64->40|81->57|81->57|84->60
+                  HASH: e76e783bf56deaa68f6ee68a05a4edc0b7cd18b4
+                  MATRIX: 726->1|834->16|1090->246|1104->252|1170->298|1238->339|1253->345|1315->386|1383->427|1398->433|1471->485|1539->526|1554->532|1632->588|1707->636|1722->642|1785->684|1869->741|1884->747|1950->792|2876->1691|2891->1697|2925->1710|3448->2206|3463->2212|3508->2236|3695->2396|3710->2402|3757->2428|3866->2510|3881->2516|3918->2532|4023->2610|4038->2616|4075->2632|4185->2715|4200->2721|4245->2745|4780->3253|4795->3259|4834->3277|4938->3354|4953->3360|4997->3383|5181->3540|5209->3547|5247->3558
+                  LINES: 21->1|26->2|33->9|33->9|33->9|34->10|34->10|34->10|35->11|35->11|35->11|36->12|36->12|36->12|37->13|37->13|37->13|38->14|38->14|38->14|52->28|52->28|52->28|59->35|59->35|59->35|61->37|61->37|61->37|62->38|62->38|62->38|63->39|63->39|63->39|64->40|64->40|64->40|72->48|72->48|72->48|73->49|73->49|73->49|80->56|80->56|83->59
                   -- GENERATED --
               */
           

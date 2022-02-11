@@ -29,6 +29,7 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
     "misura" -> text,
   )(Query.apply)(Query.unapply))
 
+
   val mtForm: Form[MTQ]= Form(mapping(
     "dataIn" -> text,
     "dataFin" -> text,
@@ -54,9 +55,11 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
   def home(): Action[AnyContent] = Action { implicit Request =>
     Ok(views.html.home())
   }
+
   def getMinAttribute(): Action[AnyContent] = Action { implicit Request =>
     Ok(views.html.minAttribute(minMaxAttr)("[]"))
   }
+
   def postMinAttribute(): Action[AnyContent] = Action{ implicit Request =>
     minMaxAttr.bindFromRequest().fold(
       error => BadRequest(""),
@@ -91,6 +94,7 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
     val s=g.getStationsM().toJSON.collectAsList().toString
     Ok(views.html.meteo_tempo(mtForm)(s)("[]"))
   }
+
   def postMeteoTemporale(): Action[AnyContent] =Action{ implicit Request =>
     val s=g.getStationsM().toJSON.collectAsList().toString
     mtForm.bindFromRequest().fold(
@@ -111,6 +115,7 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
     Ok(views.html.mediaAnnuale(maForm)(s)(Array(0.0)))
 
   }
+
   def postMediaAnnuale(): Action[AnyContent] = Action { implicit Request =>
     import ss.implicits._
     val s=g.getStationsM().toJSON.collectAsList().toString
@@ -123,12 +128,14 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
         Ok(views.html.mediaAnnuale(maForm)(s)(Array(d.head()._3,d.head()._1,d.head()._2)))}
     )
   }
+
   def getTime():Action[AnyContent] = Action { implicit Request =>
     val s=g.getStationsM().toJSON.collectAsList().toString
-    Ok(views.html.time(tseries)(s)(("[]")))
+    Ok(views.html.time(tseries)(s)((Array((0,0,0,0)))))
   }
 
   def postTime():Action[AnyContent] = Action { implicit Request =>
+    import ss.implicits._
     val s=g.getStationsM().toJSON.collectAsList().toString
     tseries.bindFromRequest().fold(
       error => BadRequest(""),
@@ -141,8 +148,9 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
           case "Pioggia" => misura="PrecipTotal"
           case "Vento" => misura="AvgSpeed"
         }
-        val serie =g.time_series(q.stazione,misura) // stazione,data,misura
-        Ok(views.html.time(tseries)(s)(serie.toJSON.collectAsList().toString))
+        val serie =g.time_series(q.stazione,misura).as[(Double,Int,Int,Int)].collect()// misura,anno,mese,giorno
+        serie.foreach(println)
+        Ok(views.html.time(tseries)(s)(serie))
 
       })
   }
@@ -162,6 +170,7 @@ class Prova @Inject()(cc:MessagesControllerComponents,lifeCicle:ApplicationLifec
     val s=g.getStationsM().toJSON.collectAsList().toString
     Ok(views.html.predictTemp(ptForm)(s)(Array((0,0,0,0,0,0,0))))
   }
+
   def postPredictTemp(): Action[AnyContent] = Action { implicit Request =>
     import ss.implicits._
 

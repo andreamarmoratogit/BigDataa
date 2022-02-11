@@ -1,10 +1,10 @@
 package Spark
 
 import org.apache.spark.ml.clustering.KMeans
-import org.apache.spark.ml.evaluation.{ClusteringEvaluator}
-import org.apache.spark.ml.feature.{Imputer,  MinMaxScaler, VectorAssembler}
-import org.apache.spark.ml.regression.{ GBTRegressionModel, GBTRegressor, GeneralizedLinearRegression, LinearRegression, RandomForestRegressor}
-
+import org.apache.spark.ml.evaluation.{ClusteringEvaluator, RegressionEvaluator}
+import org.apache.spark.ml.feature.{Imputer, MinMaxScaler, VectorAssembler}
+import org.apache.spark.ml.regression.{GBTRegressionModel, GBTRegressor, GeneralizedLinearRegression, LinearRegression, LinearRegressionModel, RandomForestRegressor}
+import org.apache.spark.ml.tuning.{CrossValidator, ParamGridBuilder}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType}
 import org.apache.spark.{SparkConf, SparkContext}
@@ -75,7 +75,7 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
       else ("Nuvoloso",1)
     }
     }).groupBy("_1").sum("_2" )
-    daily5.show()
+
     daily5.cache
     val giorniTot=daily5.agg(sum("sum(_2)")).first().get(0).toString.toDouble
     val q=daily5.map(row=>{(row(0).toString,(row(1).toString.toInt*100)/giorniTot)}).withColumnRenamed("_1","name").withColumnRenamed("_2","y")
@@ -89,10 +89,14 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
   }
 
   def time_series(stazione:String,misura:String):DataFrame={
-    val d=session.read.option("header", "true").option("inferSchema", "true").option("delimiter",";").
-      csv("Dataset\\dailyMerge.csv").select("WBAN","YearMonthDay",misura).filter(col("WBAN")===stazione).withColumnRenamed("WBAN","name")
-      .withColumnRenamed("YearMonthDay","x").withColumnRenamed(misura,"y")
-    val d2= d.show()
+    val d=session.read.option("header", "true").option("inferSchema", "true").csv("Dataset\\DailyMergePreproc")
+      .select("WBAN","YearMonthDay",misura).filter(col("WBAN")===stazione)
+      .withColumnRenamed("WBAN","name").sort("YearMonthDay")
+      .withColumn("YearMonthDay", to_date(col("YearMonthDay").cast("string"), "yyyyMMdd"))
+      .withColumn("Y",substring(col("YearMonthDay"),1,4).cast(IntegerType))
+      .withColumn("M",substring(col("YearMonthDay"),6,2).cast(IntegerType))
+      .withColumn("D",substring(col("YearMonthDay"),9,2).cast(IntegerType)).drop("YearMonthDay","name")
+    d.show()
     d
   }
 
@@ -121,11 +125,9 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     d4
   }
 
-  def kMeans():String={
-    val d=session.read.option("header", "true").option("inferSchema", "true").csv("Dataset\\KmeansScaledFeatures")
-
-    //per rimpiazzare i valori nulli con la media riferita alla data
-   /* val stations = d.select("YearMonth").distinct.collect.flatMap(_.toSeq)
+  /** k-means
+   *  //per rimpiazzare i valori nulli con la media riferita alla data
+    val stations = d.select("YearMonth").distinct.collect.flatMap(_.toSeq)
     val byStationArray = stations.map(state => d.where($"YearMonth" <=> state))
     val imputer = new Imputer()
       .setInputCols(d.columns)
@@ -136,15 +138,9 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     val d3=d2.reduce(_ union _).groupBy("WBAN").agg(avg("AvgMaxTemp") as ("AvgMaxTemp") ,avg("AvgMinTemp")as("AvgMinTemp"),
       avg("AvgTemp")as("AvgTemp"),avg("MeanStationPressure")as("MeanStationPressure"),avg("AvgWindSpeed")as("AvgWindSpeed"),
       avg("TotalMonthlyPrecip")as("TotalMonthlyPrecip")).sort("WBAN")
-    d3.cache()*/
+    d3.cache()
 
-    val v=new VectorAssembler().setInputCols(Array("AvgMinTemp","AvgMaxTemp","AvgTemp","TotalMonthlyPrecip")).setOutputCol("features")
-    val features= v.transform(d).select("WBAN","features")
-    val maScaler =new MinMaxScaler().setOutputCol("ScaledFeatures").setInputCol("features").setMin(0).setMax(10)
-    val scaledModel=maScaler.fit(features)
-    val scaledFeat=scaledModel.transform(features)
-
-    /*val kmeans = new KMeans().setSeed(1L).setFeaturesCol("ScaledFeatures")
+    val kmeans = new KMeans().setSeed(1L).setFeaturesCol("ScaledFeatures")
     val paramGrid= new ParamGridBuilder().addGrid(kmeans.k,Array(8,6)).build()
     val eval=new ClusteringEvaluator().setFeaturesCol("ScaledFeatures")
     val cv= new CrossValidator().setEstimator(kmeans).setEvaluator(eval).setEstimatorParamMaps(paramGrid).setNumFolds(4)
@@ -155,7 +151,18 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     println(eval.evaluate(ret))
     println(model.bestModel.extractParamMap())
     println(model.bestModel)
-    println(model.bestModel.getParam("k"))*/
+    println(model.bestModel.getParam("k"))
+
+   */
+
+  def kMeans():String={
+    val d=session.read.option("header", "true").option("inferSchema", "true").csv("Dataset\\KmeansScaledFeatures")
+    val v=new VectorAssembler().setInputCols(Array("AvgMinTemp","AvgMaxTemp","AvgTemp","TotalMonthlyPrecip")).setOutputCol("features")
+    val features= v.transform(d).select("WBAN","features")
+    val maScaler =new MinMaxScaler().setOutputCol("ScaledFeatures").setInputCol("features").setMin(0).setMax(10)
+    val scaledModel=maScaler.fit(features)
+    val scaledFeat=scaledModel.transform(features)
+
     val kmeans= new KMeans().setK(6).setInitSteps(4).setTol(0.001).setFeaturesCol("ScaledFeatures")
     val model = kmeans.fit(scaledFeat)
     val pred=model.transform(scaledFeat)
@@ -164,13 +171,13 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
     println(eval.evaluate(pred))
     val st= session.read.option("header", "true").option("inferSchema", "true")
       .csv("C:\\Users\\marmo\\BigDataa\\Dataset\\stationsMerge.txt").select("name" ,"lat", "lon").distinct()
-    val pred2=pred.select("WBAN","prediction").join(st,pred("WBAN")===st("name"),"left").select("name","lat","lon","prediction")
+    val pred2=pred.select("WBAN","prediction").join(st,pred("WBAN")===st("name"),"left").
+      select("name","lat","lon","prediction")
       .withColumnRenamed("prediction", "cluster")
     pred2.toJSON.collectAsList().toString
   }
 
   def predictor(stazione:String,dataIn:DataF, dataFin:DataF):DataFrame ={
-
     val x=predictor2("Tmax").join(predictor2("Tmin"), Seq("WBAN","YearMonthDay") , "left")//.sort("WBAN","YearMonthDay")
       .filter(col("YearMonthDay")<=dataFin.year+dataFin.month+dataFin.day)
       .filter(col("YearMonthDay")>=dataIn.year+dataIn.month+dataIn.day)
@@ -181,40 +188,37 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
       .withColumn("D",substring(col("YearMonthDay"),9,2).cast(IntegerType))
     x.show()
     x.drop("YearMonthDay")
-  }//.withColumn("YearMonthDay",regexp_replace(col("YearMonthDay"),"-",";"))
+  }
 
-
-  def predictor2(misura:String): DataFrame ={
-    val v=new VectorAssembler().setInputCols(Array("WBAN","MonthDay","Tmax","Tmin","Tavg","PrecipTotal","AvgSpeed")).setOutputCol("features")
-/*
+  /**
+   //val features= v.transform(d13f).select("WBAN","features",misura+"Pred")
     val d13f= session.read
      .option("header", "true").option("inferSchema", "true")
      .csv("C:\\Users\\marmo\\BigDataa\\Dataset\\predictor").withColumn("MonthDay",col("YearMonthDay")-20130000)
-    val features= v.transform(d13f).select("WBAN","features",misura+"Pred")
-    val lr=new GBTRegressor().setLabelCol(misura+"Pred").setMaxIter(30).setMaxDepth(5).setMaxBins(40).setLossType("squared")
-      .setMinInstancesPerNode(3)
-
+  //val lr=new LinearRegression().setLabelCol(misura+"Pred").setFeaturesCol("ScaledFeatures").setRegParam(0.5)
     //val paramGrid= new ParamGridBuilder().addGrid(lr.maxBins,Array(40,30)).addGrid(lr.minInfoGain,Array(0.1,0.01,0))
-     // .addGrid(lr.minInstancesPerNode,Array(1,2,3)).addGrid(lr.lossType,Array("absolute","squared")).build()
-    val eval= new RegressionEvaluator().setLabelCol(misura+"Pred")
+    //  .addGrid(lr.minInstancesPerNode,Array(1,2,3)).addGrid(lr.lossType,Array("absolute","squared")).build()
     //val cv= new CrossValidator().setEstimator(lr).setEvaluator(eval).setEstimatorParamMaps(paramGrid).setNumFolds(4)
-
-    val model=lr.fit(features)
-    model.write.overwrite().save("Dataset\\Regression"+misura)
-
-*/
-    val model = GBTRegressionModel.load("Dataset\\Regression"+misura)
+       //val scaledModel=maScaler.fit(features)
+    //val scaledFeat=scaledModel.transform(features)
+    //val model=lr.fit(scaledFeat)
+    //model.write.overwrite().save("Dataset\\Regression"+misura)
+   */
+  def predictor2(misura:String): DataFrame ={
+    val v=new VectorAssembler().setInputCols(Array("WBAN","MonthDay","Tmax","Tmin","Tavg","PrecipTotal","AvgSpeed")).setOutputCol("features")
+    val eval= new RegressionEvaluator().setLabelCol(misura+"Pred")
+    val maScaler =new MinMaxScaler().setOutputCol("ScaledFeatures").setInputCol("features").setMin(0).setMax(1)
+    val model = LinearRegressionModel.load("Dataset\\Regression"+misura)
     val d14= session.read
       .option("header", "true").option("inferSchema", "true")
-      .csv("C:\\Users\\marmo\\BigDataa\\Dataset\\Dataset2014").drop("CodeSum").withColumn("MonthDay",col("YearMonthDay")-20140000)
-
+      .csv("C:\\Users\\marmo\\BigDataa\\Dataset\\Dataset2014").drop("CodeSum")
+      .withColumn("MonthDay",col("YearMonthDay")-20140000)
     val features2=v.transform(d14)
-    val ret =model.transform(features2).withColumnRenamed("prediction",misura+"P").select("WBAN","YearMonthDay",misura+"Pred",misura+"P")
-    //println(eval.evaluate(ret))
-    //println(model.bestModel.extractParamMap())
-    //println(model.bestModel)
-    ret
-
+    val scaledModel2=maScaler.fit(features2)
+    val scaledFeat2=scaledModel2.transform(features2)
+    val ret =model.transform(scaledFeat2)
+    println(eval.evaluate(ret))
+    ret.withColumnRenamed("prediction",misura+"P").select("WBAN","YearMonthDay",misura+"Pred",misura+"P")
   }
 
   def datasetPred(): DataFrame ={
@@ -244,14 +248,14 @@ class Gestore (sc : SparkContext, session: SparkSession,configurazione: SparkCon
   }
 
   def preprocessing(dataFrame: DataFrame,nome:String): DataFrame ={
-    val stations = dataFrame.select("YearMonth").distinct.collect.flatMap(_.toSeq)
-    val byStationArray = stations.map(state => dataFrame.where($"YearMonth" <=> state))
+    val stations = dataFrame.select("YearMonthDay").distinct.collect.flatMap(_.toSeq)
+    val byStationArray = stations.map(state => dataFrame.where($"YearMonthDay" <=> state))
     val imputer = new Imputer()
       .setInputCols(dataFrame.columns)
       .setOutputCols(dataFrame.columns.map(c => s"${c}"))
       .setStrategy("mean")
     val d13r=byStationArray.map(x=>imputer.fit(x).transform(x))
-    val d13f=d13r.reduce(_ union _).sort("WBAN","YearMonth")
+    val d13f=d13r.reduce(_ union _).sort("WBAN","YearMonthDay")
     d13f.coalesce(1).write.format("com.databricks.spark.csv")
       .option("header", "true")
       .save("C:\\Users\\marmo\\BigDataa\\Dataset\\"+nome)

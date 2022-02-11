@@ -39,6 +39,9 @@
             chart: {
                 map: 'custom/north-america-no-central'
             },
+            title:{
+                text:'Stazioni metereologiche'
+            },
             mapNavigation: {
                 enabled: true
             },
@@ -125,9 +128,6 @@
     </script>
 
     <script>
-        // A point click event that uses the Renderer to draw a label next to the point
-        // On subsequent clicks, move the existing label instead of creating a new one.
-
 
         var d= [];
         var giorni=[];
@@ -150,7 +150,6 @@
         giorni.forEach(function(point) {
             point[0] = Date.parse(point[0])
         });
-
 
 
         const chart2=Highcharts.chart('container2', {

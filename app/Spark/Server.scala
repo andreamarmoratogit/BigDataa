@@ -9,5 +9,5 @@ object Server extends App {
   val sc=new SparkContext(conf)
   val ss=SparkSession.builder().getOrCreate()
   val g=new Gestore(sc,ss,conf)
-  g.predictor("12912",new DataF("2014","03","01"),new DataF("2014","03","18"))
+  g.time_series("24036","Tmax")
 }

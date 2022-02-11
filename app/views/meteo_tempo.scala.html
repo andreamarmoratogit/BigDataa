@@ -5,18 +5,19 @@
     <div class="position-absolute top-0 start-1">
         <form method="post" action="@routes.Prova.postMeteoTemporale()">
             @helper.CSRF.formField
-            <h4 class="demoHeaders">Data Iniziale</h4>
+            <h5 class="demoHeaders">Data Iniziale</h5>
             <input type="text" name="dataIn" id="datepicker">
             <br>
-            <h4 class="demoHeaders">Data Finale</h4>
+            <h5 class="demoHeaders">Data Finale</h5>
             <input type="text" name="dataFin" id="datepicker2">
             <br>
-            <input class="form-control" id="stazione" type="text" name="stazione" value="" aria-label="readonly input example" readonly>
+            <h5 class="demoHeaders">Stazione</h5>
+            <input class="form-control" id="stazione" type="text" name="stazione"
+                value="" aria-label="readonly input example" readonly>
             <br>
             <input type="submit" id="button">
         </form>
     </div>
-
 
     <div class="container" id="container"></div>
 
@@ -126,7 +127,7 @@
                 type: 'pie'
             },
             title: {
-                text: 'Browser market shares in January, 2018'
+                text: ''
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

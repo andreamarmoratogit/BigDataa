@@ -96,37 +96,31 @@
             chart: {
                 map: 'countries/us/custom/us-all-mainland'
             },
-
             title: {
-                text: 'Highmaps basic demo'
+                text: 'Temperatura media annuale negli Stati Uniti'
             },
-
-            subtitle: {
-                text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/us/custom/us-all-mainland.js">United States of America, mainland</a>'
-            },
-
             mapNavigation: {
                 enabled: true,
                 buttonOptions: {
                     verticalAlign: 'bottom'
                 }
             },
-
             colorAxis: {
-                min: 20,
-                max:80,
-                color: "#E60B33FF"
+                min: 38,
+                max:72,
+                startOnTick:false,
+                endOnTick:false,
+                maxColor: "#ff0000",
+                minColor:"#7bff00"
             },
-
             series: [{
                 data: data2,
                 name: 'Random data',
                 states: {
                     hover: {
-                        color: '#e60b66'
+                        color: '#ffe100'
                     }
                 },
-
                 dataLabels: {
                     enabled: true,
                     format: '{point.name}'
